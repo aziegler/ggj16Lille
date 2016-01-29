@@ -1,4 +1,34 @@
 
+var global = {
+    WIDTH: 1136,
+    HEIGHT: 640,
+    DEBUG: true,
+    network: {
+        socket: undefined,
+        host: "localhost",
+        port: 3000
+    },
+    state: {
+        playername: "",
+        localPlayer: undefined,
+        remotePlayers: [],
+        rooms: [],
+        status: "No"
+    },
+    functions: {
+        playerById: function(id) {
+            var i;
+
+            for (i = 0; i < global.state.remotePlayers.length; i++) {
+                if (global.state.remotePlayers[i].id === id)
+                    return global.state.remotePlayers[i];
+            };
+
+            return false;
+        }
+    }
+}
+
 /* Game namespace */
 var game = {
 
@@ -39,11 +69,11 @@ var game = {
 
     // Run on game resources loaded.
     "loaded" : function () {
-        me.state.set(me.state.MENU, new game.TitleScreen());
-        me.state.set(me.state.PLAY, new game.PlayScreen());
+     //   me.state.set(me.state.MENU, new game.TitleScreen());
+        me.state.set(me.state.PLAY, new game.MainScreen());
 
         // add our player entity in the entity pool
-        me.pool.register("mainPlayer", game.PlayerEntity);
+        me.pool.register("mainPlayer", game.Player);
 
         // Start the game.
         me.state.change(me.state.PLAY);
