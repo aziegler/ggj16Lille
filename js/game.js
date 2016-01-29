@@ -101,6 +101,6 @@ var game = {
         me.input.bindKey(me.input.KEY.SPACE, "carry", true);
 
         // start the game
-        me.state.change(me.state.READY);
+        me.state.change(me.state.MENU);
     }
 };
