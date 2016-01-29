@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 melonJS boilerplate
 -------------------------------------------------------------------------------
 
@@ -61,3 +62,6 @@ Note that you may have to edit the file `Gruntfile.js` if you need to better dic
 -------------------------------------------------------------------------------
 Copyright (C) 2011 - 2015 Olivier Biot, Jason Oster, Aaron McLeod
 melonJS is licensed under the [MIT License](http://www.opensource.org/licenses/mit-license.php)
+=======
+# ggj16Lille
+>>>>>>> 15524b435394012e31a6f53e98cdc16dab7e019f
