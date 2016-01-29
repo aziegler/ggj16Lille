@@ -20,7 +20,7 @@ game.MainScreen = me.ScreenObject.extend({
         me.input.bindKey(me.input.KEY.UP, "up");
         me.input.bindKey(me.input.KEY.DOWN, "down");
 
-        global.state.localPlayer = me.pool.pull("mainPlayer");
+        global.state.localPlayer = me.pool.pull("networkPlayer");
         
 
         me.game.world.addChild(global.state.localPlayer, 4);

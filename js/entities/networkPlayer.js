@@ -1,7 +1,7 @@
 /**
  * Player Entity
  */
-game.Player = me.Entity.extend({
+game.NetworkPlayer = me.Entity.extend({
 
     /**
      * constructor
