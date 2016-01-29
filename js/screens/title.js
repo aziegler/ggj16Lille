@@ -12,6 +12,10 @@ game.TitleScreen = me.ScreenObject.extend({
             1
         );
 
+        // add our HUD to the game world
+        this.TitleUI = new game.TitleUI.Container();
+        me.game.world.addChild(this.TitleUI);
+
 
         // add a new renderable component with the scrolling text
         me.game.world.addChild(new (me.Renderable.extend ({
@@ -68,5 +72,6 @@ game.TitleScreen = me.ScreenObject.extend({
         me.input.unbindKey(me.input.KEY.ENTER);
         //me.input.unbindPointer(me.input.mouse.LEFT);
         me.event.unsubscribe(this.handler);
+        me.game.world.removeChild(this.TitleUI);
     }
 });
