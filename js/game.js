@@ -32,6 +32,15 @@ var global = {
 var game = {
 
     data : {
+        players : [
+            "player1",
+            "player2",
+            "player3"
+        ],
+
+        playersDirty: true,
+
+        // score
         score : 0
     },
 

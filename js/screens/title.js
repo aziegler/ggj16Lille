@@ -12,6 +12,10 @@ game.TitleScreen = me.ScreenObject.extend({
             1
         );
 
+        // add our HUD to the game world
+        this.TitleUI = new game.TitleUI.Container();
+        me.game.world.addChild(this.TitleUI);
+
 
         // add a new renderable component with the scrolling text
         me.game.world.addChild(new (me.Renderable.extend ({
@@ -19,7 +23,7 @@ game.TitleScreen = me.ScreenObject.extend({
             init : function() {
                 this._super(me.Renderable, 'init', [0, 0, me.game.viewport.width, me.game.viewport.height]);
                 // font for the scrolling text
-              //  this.font = new me.BitmapFont("32x32_font", 32);
+                this.font = new me.BitmapFont("32x32_font", 32);
 
                 // a tween to animate the arrow
                // this.scrollertween = new me.Tween(this).to({scrollerpos: -2200 }, 10000).onComplete(this.scrollover.bind(this)).start();
@@ -68,5 +72,6 @@ game.TitleScreen = me.ScreenObject.extend({
         me.input.unbindKey(me.input.KEY.ENTER);
         //me.input.unbindPointer(me.input.mouse.LEFT);
         me.event.unsubscribe(this.handler);
+        me.game.world.removeChild(this.TitleUI);
     }
 });
