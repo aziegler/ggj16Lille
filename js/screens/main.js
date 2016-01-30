@@ -40,6 +40,9 @@ game.MainScreen = me.ScreenObject.extend({
             game.data.lobbyPlayers = {};
         }, 500);
 
+        global.network.socket.on("returnToLobby", function () {
+            me.state.change(me.state.MENU);
+        });
 
         global.network.socket.on("refreshPlayer", function (infos) {
             var player = game.functions.playerById(infos.id);

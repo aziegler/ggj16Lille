@@ -4,8 +4,11 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Player = require("./Player").Player;
 
-var gauge = 200;
-var timer = 300;
+var GAUGE_INIT = 200;
+var TIMER_INIT = 300;
+
+var gauge;
+var timer;
 
 app.use(express.static(__dirname + '/public'));
 
@@ -24,12 +27,16 @@ setInterval(update, 1000);
 
 var state = GameState.LOBBY;
 var players = [];
+var waitingPlayers = [];
 var hasSpy = false;
 
 function init() {
 }
 
 function update() {
+    if (state !== GameState.RITUAL)
+        return;
+
     for (var i = 0; i < players.length; i++) {
         if (players[i].dancing) {
             if (players[i].isSpy) {
@@ -42,22 +49,25 @@ function update() {
     }
     timer = timer - 1;
     var end = checkGameEnded();
-    console.log("End ? "+end);
-        if(!end){
-            io.emit("scoreUpdate", {"gauge": gauge, "time": timer});
-        }
+    //console.log("End ? " + end);
+    if (end) {
+        returnToLobby();
     }
+    else {
+        io.emit("scoreUpdate", {"gauge": gauge, "time": timer});
+    }
+}
 
-function checkGameEnded(){
-    if(timer <= 0){
+function checkGameEnded() {
+    if (timer <= 0) {
         io.emit("defeat");
         return true;
     }
-    if(gauge > 400){
+    if (gauge > 400) {
         io.emit("victory");
         return true;
     }
-    if(gauge == 0){
+    if (gauge == 0) {
         io.emit("defeat");
         return true;
     }
@@ -70,13 +80,10 @@ function onSocketConnection(client) {
     client.on("disconnect", onClientDisconnection);
 
     // Lobby messages
-    client.on("lobby", function () {
-        onLobby(client);
-    });
+    client.on("lobby", onLobby);
     client.on("lobbyReady", onLobbyReady);
 
     // Game messages
-    //client.on("start", onStartEmitted);
     client.on("move", onMoveEmitted);
     client.on("dance", onDanceEmitted);
     client.on("stand", onStandEmitted);
@@ -152,12 +159,18 @@ function createPlayer(client) {
     client.broadcast.emit("lobbyAddPlayer", newPlayer);
 }
 
-function onLobby(client) {
-    if (state !== GameState.LOBBY)
-        return;
+function createWaitingPlayer(client) {
+    waitingPlayers.push(client);
+}
 
-    console.log("lobby from " + client.id);
-    createPlayer(client);
+function onLobby() {
+    console.log("lobby from " + this.id);
+
+    if (state === GameState.LOBBY) {
+        createPlayer(this);
+    } else {
+        createWaitingPlayer(this);
+    }
 }
 
 function onLobbyReady() {
@@ -167,21 +180,34 @@ function onLobbyReady() {
 
     state = GameState.RITUAL;
 
+    gauge = GAUGE_INIT;
+    timer = TIMER_INIT;
+
+    console.log("lobby ready");
+
     var spyIdx = Math.floor((Math.random() * players.length));
     console.log("Spy : "+spyIdx+"/"+players.length);
     players[spyIdx].isSpy = true;
     io.to(players[spyIdx].id).emit("spy");
-    players.forEach(function(p){
-       console.log("player " + p.id);
+
+    players.forEach(function (p) {
+        console.log("player " + p.id);
     });
     console.log("gameStart sent.")
-    io.emit("gameStart");
+
+    players.forEach(function(p){
+        io.to(p.id).emit("gameStart");
+    });
+
     io.emit("scoreUpdate", {"gauge": gauge, "time": timer});
 }
 
 function onStandEmitted(value) {
     var player = playerById(this.id);
-    if(player.isDead)
+    if (!player)
+        return;
+
+    if (player.isDead)
         return;
     player.stand = value;
     if (value == true)
@@ -191,7 +217,10 @@ function onStandEmitted(value) {
 
 function onDanceEmitted(value) {
     var player = playerById(this.id);
-    if(player.isDead)
+    if (!player)
+        return;
+
+    if (player.isDead)
         return;
     if (value) {
         player.dancing = true;
@@ -208,52 +237,41 @@ function onDanceEmitted(value) {
 
 function onMoveEmitted(direction) {
     var player = playerById(this.id);
-    if(player.isDead)
+    if (!player)
+        return;
+
+    if (player.isDead)
         return;
     player.direction = direction;
     var offset = 10;
-   switch (direction)
-        {
-            case "up":
-                player.setAnim("walk");
-                player.y = player.y - offset;
-                break;
-            case "down":
-                player.setAnim("walk");
-                player.y = player.y + offset;
-                break;
-            case "left":
-                player.setAnim("walk");
-                player.x = player.x - offset;
-                break;
-            case "right":
-                player.setAnim("walk");
-                player.x = player.x + offset;
-                break;
-        }
+    switch (direction) {
+        case "up":
+            player.setAnim("walk");
+            player.y = player.y - offset;
+            break;
+        case "down":
+            player.setAnim("walk");
+            player.y = player.y + offset;
+            break;
+        case "left":
+            player.setAnim("walk");
+            player.x = player.x - offset;
+            break;
+        case "right":
+            player.setAnim("walk");
+            player.x = player.x + offset;
+            break;
+    }
     io.emit("refreshPlayer", player);
 }
 
 
-//function onStartEmitted(client) {
-//    var idx = Math.floor((Math.random() * 6) + 1);
-//    var newPlayer = new Player(this.id, "Player 1", idx);
-//    if (!hasSpy && Math.random() < 0.3) {
-//        newPlayer.isSpy = true;
-//        this.emit("spy");
-//        hasSpy = true;
-//    }
-//    if (!players)
-//        players = [];
-//    var i;
-//    for (i = 0; i < players.length; i++) {
-//        console.log(players[i]);
-//        this.emit("playerCreated", players[i]);
-//    }
-//    players.push(newPlayer);
-//    io.emit("playerCreated", newPlayer);
-//    this.emit("scoreUpdate", {"gauge": gauge, "time": timer});
-//}
+function returnToLobby() {
+    state = GameState.LOBBY;
+    io.emit("returnToLobby");
+    players = [];
+    waitingPlayers = [];
+}
 
 function onClientDisconnection(client) {
     console.log("Client disconnection from " + this.id);
@@ -271,7 +289,7 @@ function onClientDisconnection(client) {
     if (state == GameState.RITUAL &&
         Object.keys(players).length == 0) {
         console.log("No players left, returning to LOBBY");
-        state = GameState.LOBBY;
+        returnToLobby();
     }
 
     return false;

@@ -2,7 +2,8 @@ game.TitleScreen = me.ScreenObject.extend({
 
     onResetEvent : function() {
 
-        global.network.socket = io('http://localhost:3000');
+        if (!global.network.socket)
+            global.network.socket = io('http://localhost:3000');
 
         var socket = global.network.socket;
 
