@@ -42,7 +42,7 @@ game.PlayerEntity = me.Entity.extend({
         this.marks = [];
 
         var settings = {};
-        var imageName = "placeholderchara" + playerIdx;
+        var imageName = "spritesheet" + playerIdx;
         settings.image = me.loader.getImage(imageName);
         settings.width = 64;
         settings.height = 64;
@@ -64,22 +64,22 @@ game.PlayerEntity = me.Entity.extend({
         this.alwaysUpdate = true;
 
         // define a basic walking animation (using all frames)
-        animSheet.addAnimation("stand_side", [0]);
-        animSheet.addAnimation("stand_up", [0]);
-        animSheet.addAnimation("stand_down", [0]);
+        animSheet.addAnimation("stand_side", [0,3,8,13]);
+        animSheet.addAnimation("stand_up", [7,12,15,16]);
+        animSheet.addAnimation("stand_down", [0,3,8,13]);
 
-        animSheet.addAnimation("dead_side", [2]);
-        animSheet.addAnimation("dead_up", [2]);
-        animSheet.addAnimation("dead_down", [2]);
+        animSheet.addAnimation("dead_side", [14]);
+        animSheet.addAnimation("dead_up", [14]);
+        animSheet.addAnimation("dead_down", [14]);
 
 
-        animSheet.addAnimation("walk_side", [0]);
-        animSheet.addAnimation("walk_up", [0]);
-        animSheet.addAnimation("walk_down", [0]);
+        animSheet.addAnimation("walk_side", [0,3,8,13]);
+        animSheet.addAnimation("walk_up", [7,12,15,16]);
+        animSheet.addAnimation("walk_down", [0,3,8,13]);
 
-        animSheet.addAnimation("dance1_side", [1]);
-        animSheet.addAnimation("dance1_up", [1]);
-        animSheet.addAnimation("dance1_down", [1]);
+        animSheet.addAnimation("dance1_side", [6, 1, 10], 100);
+        animSheet.addAnimation("dance1_up", [17, 5], 275);
+        animSheet.addAnimation("dance1_down", [2, 11], 60);
 
 
         animSheet.addAnimation("carry", [0]);
@@ -107,7 +107,7 @@ game.PlayerEntity = me.Entity.extend({
 
         var dir = playerInfo.direction;
 
-        this.sheet.flipX(dir == "left");
+        this.sheet.flipX(dir == "right");
 
         if (dir == "left" || dir == "right") {
             dir = "side";
