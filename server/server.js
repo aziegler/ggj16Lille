@@ -41,12 +41,12 @@ function update() {
         if (players[i].dancing && !players[i].isDead) {
             if (players[i].isSpy) {
                 gauge -= 30;
-                gauge = Math.max(gauge, 0);
             } else {
                 gauge += 8;
             }
         }
     }
+    gauge = Math.max(gauge, 0);
     timer = timer - 1;
     var end = checkGameEnded();
     //console.log("End ? " + end);
