@@ -17,7 +17,9 @@ game.MainScreen = me.ScreenObject.extend({
 
         global.network.socket.on("refreshPlayer",function(infos){
             var player = game.functions.playerById(infos.id);
-            player.refresh(infos);
+            if(player != null) {
+                player.refresh(infos);
+            }
         });
 
         global.network.socket.on("scoreUpdate",function(score){
