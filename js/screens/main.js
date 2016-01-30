@@ -12,18 +12,33 @@ game.MainScreen = me.ScreenObject.extend({
             console.log(player);
         })
         global.network.socket.on("playerPosition",function(player){
-            console.log(player.x);
+            console.log(player);
         })
+
+        global.network.socket.on("scoreUpdate",function(score){
+            game.data.score = score;
+        })
+
+         global.network.socket.on("spy",function(){
+            game.data.localSpy = true;
+        })
+
+         me.levelDirector.loadLevel("area01");
+
 
         me.input.bindKey(me.input.KEY.LEFT, "left");
         me.input.bindKey(me.input.KEY.RIGHT, "right");
         me.input.bindKey(me.input.KEY.UP, "up");
         me.input.bindKey(me.input.KEY.DOWN, "down");
+        me.input.bindKey(me.input.KEY.X, "x");
 
-        global.state.localPlayer = me.pool.pull("networkPlayer");
+        var player = me.pool.pull("networkPlayer");
         
+        this.HUD = new game.HUD.Container();
+        
+        me.game.world.addChild(this.HUD);
 
-        me.game.world.addChild(global.state.localPlayer, 4);
+        me.game.world.addChild(player, 4);
     }
 
 });

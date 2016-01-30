@@ -1,30 +1,8 @@
 var global = {
-    WIDTH: 1136,
-    HEIGHT: 640,
-    DEBUG: true,
     network: {
         socket: undefined,
         host: "localhost",
         port: 3000
-    },
-    state: {
-        playername: "",
-        localPlayer: undefined,
-        remotePlayers: [],
-        rooms: [],
-        status: "No"
-    },
-    functions: {
-        playerById: function(id) {
-            var i;
-
-            for (i = 0; i < global.state.remotePlayers.length; i++) {
-                if (global.state.remotePlayers[i].id === id)
-                    return global.state.remotePlayers[i];
-            };
-
-            return false;
-        }
     }
 }
 
@@ -41,7 +19,9 @@ var game = {
         playersDirty: true,
 
         // score
-        score : 0
+        score : 0,
+
+        localSpy : false
     },
 
     // Run on page load.
@@ -101,6 +81,6 @@ var game = {
         me.input.bindKey(me.input.KEY.SPACE, "carry", true);
 
         // start the game
-        me.state.change(me.state.MENU);
+        me.state.change(me.state.READY);
     }
 };

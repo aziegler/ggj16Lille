@@ -21,6 +21,44 @@ game.HUD.Container = me.Container.extend({
 
         // add our child score object at the right-bottom position
         this.addChild(new game.HUD.ScoreItem(630, 440));
+        this.addChild(new game.HUD.Spy(430, 440));
+    }
+});
+
+game.HUD.Spy = me.Renderable.extend( {
+    /**
+     * constructor
+     */
+    init: function(x, y) {
+
+        // call the parent constructor
+        // (size does not matter here)
+        this._super(me.Renderable, 'init', [x, y, 10, 10]);
+
+        // create a font
+        this.font = new me.BitmapFont("32x32_font", 32);
+        this.font.set("right");
+
+        // local copy of the global score
+        this.score = -1;
+    },
+
+    /**
+     * update function
+     */
+    update : function (dt) {
+        // we don't draw anything fancy here, so just
+        // return true if the score has been updated
+        return true;
+    },
+
+    /**
+     * draw the score
+     */
+    draw : function (renderer) {
+        if(game.data.localSpy){
+            this.font.draw (renderer, "SPY", this.pos.x, this.pos.y);
+        }
     }
 });
 
@@ -48,11 +86,7 @@ game.HUD.ScoreItem = me.Renderable.extend( {
     update : function (dt) {
         // we don't draw anything fancy here, so just
         // return true if the score has been updated
-        if (this.score !== game.data.score) {
-            this.score = game.data.score;
-            return true;
-        }
-        return false;
+        return true;
     },
 
     /**

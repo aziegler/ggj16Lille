@@ -18,9 +18,12 @@ game.NetworkPlayer = me.Entity.extend({
      
         // ensure the player is updated even when outside of the viewport
         this.alwaysUpdate = true;
+
+        this.dancing = false;
      
      
     },
+
 
     /**
      * update the entity
@@ -40,6 +43,19 @@ game.NetworkPlayer = me.Entity.extend({
      
         if (me.input.isKeyPressed("down")) {
           global.network.socket.emit("move","down");
+        }
+
+        if (me.input.isKeyPressed("x")) {
+            console.log(this.dancing);
+            if(!this.dancing){
+                this.dancing = true;
+                global.network.socket.emit("dance",true);
+            }
+        }else{
+            if(this.dancing){
+                this.dancing = false;   
+                global.network.socket.emit("dance",false);
+            }
         }
     },
 
