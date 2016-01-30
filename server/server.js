@@ -9,6 +9,7 @@ var TIMER_INIT = 300;
 
 var gauge;
 var timer;
+var colors = [1, 2, 3, 4, 5, 6];
 
 app.use(express.static(__dirname + '/public'));
 
@@ -147,11 +148,14 @@ function createPlayer(client) {
 
 
     // TODO select spy at game start instead
-    
+
+    var colorIx = Math.floor(Math.random() * colors.length);
+    var color = colors[colorIx];
+    colors.splice(colorIx, 1);
+    console.log("Assigned color index " + color + " to " + client.id);
 
     // Create and store object
-    var newPlayer = new Player(client.id, "PLAYER " + num,
-        Math.floor((Math.random() * 6) + 1));
+    var newPlayer = new Player(client.id, "PLAYER " + num, color);
     players.push(newPlayer);
 
     // Emit player info
@@ -193,7 +197,7 @@ function onLobbyReady() {
     players.forEach(function (p) {
         console.log("player " + p.id);
     });
-    console.log("gameStart sent.")
+    console.log("gameStart sent.");
 
     players.forEach(function(p){
         io.to(p.id).emit("gameStart");
@@ -271,6 +275,7 @@ function onMoveEmitted(direction) {
 
 function returnToLobby() {
     state = GameState.LOBBY;
+    colors = [1, 2, 3, 4, 5, 6];
     io.emit("returnToLobby");
     players = [];
     waitingPlayers = [];
