@@ -69,6 +69,11 @@ game.PlayerEntity = me.Entity.extend({
         animSheet.addAnimation("stand_up",  [0]);
         animSheet.addAnimation("stand_down",  [0]);
 
+        animSheet.addAnimation("dead_side",  [2]);
+        animSheet.addAnimation("dead_up",  [2]);
+        animSheet.addAnimation("dead_down",  [2]);
+
+
         animSheet.addAnimation("walk_side",  [0]);
         animSheet.addAnimation("walk_up",  [0]);
         animSheet.addAnimation("walk_down",  [0]);

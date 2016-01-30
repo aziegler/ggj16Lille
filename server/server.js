@@ -131,6 +131,8 @@ function onLobby(client) {
 
 function onStandEmitted(value) {
     var player = playerById(this.id);
+    if(player.isDead)
+        return;
     player.stand = value;
     if (value == true)
         player.setAnim("stand");
@@ -139,6 +141,8 @@ function onStandEmitted(value) {
 
 function onDanceEmitted(value) {
     var player = playerById(this.id);
+    if(player.isDead)
+        return;
     if (value) {
         player.dancing = true;
         player.stand = false;
@@ -154,6 +158,8 @@ function onDanceEmitted(value) {
 
 function onMoveEmitted(direction) {
     var player = playerById(this.id);
+    if(player.isDead)
+        return;
     player.direction = direction;
     var offset = 10;
    switch (direction)
