@@ -11,6 +11,7 @@ var Marks = me.Renderable.extend({
         // create a font
         this.font = new me.Font("Arial", 18, "#ffffff");
 
+
     },
 
     /**
@@ -36,7 +37,8 @@ game.PlayerEntity = me.Entity.extend({
 
         this.direction = "right";
         this.animation = 'stand';
-
+        this.dirX = 0;
+        this.dirY = 0;
         this.playerId = id;
 
         this.marks = [];
@@ -103,17 +105,18 @@ game.PlayerEntity = me.Entity.extend({
 
     update: function (dt) {
         this._super(me.Entity, 'update', [dt]);
-
-        this.body.update(dt);
+        //this.body.update(dt);
+        this.pos.x  = this.pos.x + this.dirX * dt * 0.001;
+        this.pos.y  = this.pos.y + this.dirY * dt * 0.001;
 
     },
 
     refresh: function (playerInfo) {
-        //this.pos.x = playerInfo.x;
-        //this.pos.y = playerInfo.y;
-
-        this.body.setVelocity(playerInfo.dx, playerInfo.dy);
-
+        this.pos.x = playerInfo.x;
+        this.pos.y = playerInfo.y;
+        this.dirX = playerInfo.dx;
+        this.dirY = playerInfo.dy;
+       
         this.mark.markCount = playerInfo.marks.length;
 
         var dir = playerInfo.direction;
