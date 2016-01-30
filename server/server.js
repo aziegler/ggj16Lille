@@ -31,6 +31,7 @@ function update(){
        if(players[i].dancing){
             if(players[i].isSpy){
                 gauge -= 100;
+                gauge = Math.max(gauge,0);
             }else{
                 gauge += 10;
             }
@@ -137,7 +138,7 @@ function onClientDisconnection(client) {
         if(players[i].id === this.id)
             break;
     };
-    if(players[i].isSpy)
+    if(players[i] && players[i].isSpy)
         hasSpy = false;
     players.splice(i,1);
     io.emit("removePlayer",idToRemove);

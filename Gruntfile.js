@@ -8,7 +8,7 @@ module.exports = function(grunt) {
           'lib/melonJS-<%= pkg.version %>.js',
           'lib/plugins/*.js',
           'js/game.js',
-          'build/js/resources.js',
+          'build/resources.js',
           'js/**/*.js',
         ],
         dest: 'server/public/js/app.js'
@@ -109,7 +109,7 @@ module.exports = function(grunt) {
     resources: {
       dist: {
         options: {
-          dest: 'build/js/resources.js',
+          dest: 'build/resources.js',
           varname: 'game.resources',
         },
         files: [{
