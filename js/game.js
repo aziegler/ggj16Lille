@@ -4,17 +4,19 @@ var global = {
         host: "localhost",
         port: 3000
     }
-}
+};
 
 /* Game namespace */
 var game = {
 
     data: {
+        lobbyPlayers: {},
+
+        lobbyPlayersDirty: true,
+
         players: {},
 
         localPlayer : null,
-
-        playersDirty: true,
 
         // score
         score: 0,
@@ -28,12 +30,12 @@ var game = {
             gaugeCurrentValue: 50,
             gaugeMaxValue: 100,
             goodRitualInc: +1,
-            badRitualInc: -2,
+            badRitualInc: -2
         }
     },
     functions: {
         playerById: function (id) {
-            return game.data.players[id];
+            return game.data.lobbyPlayers[id];
         }
     },
 

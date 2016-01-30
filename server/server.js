@@ -49,6 +49,7 @@ function onSocketConnection(client) {
 
     // Lobby messages
     client.on("lobby", function() { onLobby(client); });
+    client.on("lobbyReady", onLobbyReady);
 
     // Game messages
     client.on("start", onStartEmitted);
@@ -127,6 +128,11 @@ function createPlayer(client) {
 function onLobby(client) {
     console.log("lobby from " + client.id);
     createPlayer(client);
+}
+
+function onLobbyReady() {
+    console.log("lobby ready");
+    io.emit("gameStart");
 }
 
 function onStandEmitted(value) {

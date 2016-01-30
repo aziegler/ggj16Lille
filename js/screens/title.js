@@ -67,7 +67,8 @@ game.TitleScreen = me.ScreenObject.extend({
             if (action === "enter") {
                 // play something on tap / enter
                 // this will unlock audio on mobile devices
-                me.state.change(me.state.PLAY);
+                //me.state.change(me.state.READY);
+                socket.emit("lobbyReady")
             }
         });
 
@@ -76,6 +77,7 @@ game.TitleScreen = me.ScreenObject.extend({
         socket.on("initLobby", function(p) { self.initPlayers(self, p); });
         socket.on("lobbyAddPlayer", function(p) { self.addPlayer(self, p); });
         socket.on("removePlayer", function(p) { self.removePlayer(self, p); });
+        socket.on("gameStart", function() { me.state.change(me.state.READY); });
     },
 
     /**
@@ -87,6 +89,7 @@ game.TitleScreen = me.ScreenObject.extend({
         me.event.unsubscribe(this.handler);
         me.game.world.removeChild(this.TitleUI);
 
+        var socket = global.network.socket;
         socket.removeAllListeners("initLobby");
         socket.removeAllListeners("lobbyAddPlayer");
         socket.removeAllListeners("removePlayer");
@@ -100,14 +103,14 @@ game.TitleScreen = me.ScreenObject.extend({
     addPlayer : function(self, player) {
         if (me.game.HASH.debug === true)
             console.log("socket addPlayer " + player.id);
-        game.data.players[player.id] = player;
-        game.data.playersDirty = true;
+        game.data.lobbyPlayers[player.id] = player;
+        game.data.lobbyPlayersDirty = true;
     },
 
     removePlayer : function(self, playerId) {
         if (me.game.HASH.debug === true)
             console.log("socket removePlayer " + playerId);
-        delete game.data.players[playerId];
-        game.data.playersDirty = true;
+        delete game.data.lobbyPlayers[playerId];
+        game.data.lobbyPlayersDirty = true;
     }
 });

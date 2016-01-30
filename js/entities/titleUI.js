@@ -51,9 +51,9 @@ game.TitleUI.Container = me.Container.extend({
     update: function() {
         this._super(me.Container, 'update');
 
-        if (!game.data.playersDirty) return false;
+        if (!game.data.lobbyPlayersDirty) return false;
 
-        game.data.playersDirty = false;
+        game.data.lobbyPlayersDirty = false;
 
         if (me.game.HASH.debug === true)
             console.log("TitleUI.update numChildren = " + this.numChildren);
@@ -65,8 +65,8 @@ game.TitleUI.Container = me.Container.extend({
 
         var self = this;
         var index = 0;
-        Object.keys(game.data.players).forEach(function(id) {
-            self.addPlayer(self, game.data.players[id], index++);
+        Object.keys(game.data.lobbyPlayers).forEach(function(id) {
+            self.addPlayer(self, game.data.lobbyPlayers[id], index++);
         });
 
         return true;
