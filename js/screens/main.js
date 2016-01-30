@@ -29,6 +29,12 @@ game.MainScreen = me.ScreenObject.extend({
             game.data.localSpy = true;
         });
 
+        global.network.socket.on("removePlayer",function(playerId){
+            var player = game.functions.playerById(playerId);
+            me.game.world.removeChild(player);
+            game.data.players[playerId] = nil;
+        });
+
          me.levelDirector.loadLevel("area01");
 
 
