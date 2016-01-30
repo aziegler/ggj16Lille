@@ -27,37 +27,43 @@ game.NetworkPlayer = me.Entity.extend({
      * update the entity
      */
     update: function (dt) {
+        var emit = function(m, p) {
+            if (global.network.socket) {
+                global.network.socket.emit(m, p);
+            }
+        };
+
         var isStanding = true;
         if (me.input.isKeyPressed("left")) {
-            global.network.socket.emit("move", "left");
+            emit("move", "left");
             isStanding = false;
         }
 
         if (me.input.isKeyPressed("right")) {
-            global.network.socket.emit("move", "right");
+            emit("move", "right");
             isStanding = false;
         }
 
         if (me.input.isKeyPressed("up")) {
-            global.network.socket.emit("move", "up");
+            emit("move", "up");
             isStanding = false;
         }
 
         if (me.input.isKeyPressed("down")) {
-            global.network.socket.emit("move", "down");
+            emit("move", "down");
             isStanding = false;
         }
 
         if (me.input.isKeyPressed("dance")) {
             if (!this.dancing) {
                 this.dancing = true;
-                global.network.socket.emit("dance", true);
+                emit("dance", true);
             }
             isStanding = false;
         } else {
             if (this.dancing) {
                 this.dancing = false;
-                global.network.socket.emit("dance", false);
+                emit("dance", false);
             }
         }
 
@@ -70,7 +76,7 @@ game.NetworkPlayer = me.Entity.extend({
 
         if(this.stand != isStanding) {
             this.stand = isStanding;
-            global.network.socket.emit("stand", isStanding);
+            emit("stand", isStanding);
         }
     },
 

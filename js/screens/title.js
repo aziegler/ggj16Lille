@@ -6,8 +6,11 @@ game.TitleScreen = me.ScreenObject.extend({
             global.network.socket = io('http://localhost:3000');
 
         var socket = global.network.socket;
-
-        socket.emit("lobby");
+        socket.on('disconnect', function() {
+            socket.removeAllListeners('disconnect');
+            global.network.socket = null;
+            me.state.change(me.state.MENU);
+        });
 
         game.data.defeat = false;
         game.data.victory = false;
@@ -18,7 +21,7 @@ game.TitleScreen = me.ScreenObject.extend({
         // title screen
         me.game.world.addChild(
             new me.Sprite(
-                0,0, {
+                0, 0, {
                     image: me.loader.getImage('title_screen')
                 }
             ),
@@ -80,6 +83,7 @@ game.TitleScreen = me.ScreenObject.extend({
         // Register network event handlers (once all receivers are init'ed)
         var self = this;
         socket.on("initLobby", function(p) { self.initPlayers(self, p); });
+        socket.on("initLobbyWaiting", function() { self.initWaiting(self); });
         socket.on("lobbyAddPlayer", function(p) { self.addPlayer(self, p); });
         socket.on("removePlayer", function(p) { self.removePlayer(self, p); });
         socket.on("gameStart", function() {
@@ -106,9 +110,15 @@ game.TitleScreen = me.ScreenObject.extend({
         me.game.world.removeChild(this.TitleUI);
 
         var socket = global.network.socket;
-        socket.removeAllListeners("initLobby");
+        if (!socket) return;
+            socket.removeAllListeners("initLobby");
+        socket.removeAllListeners("initLobbyWaiting");
         socket.removeAllListeners("lobbyAddPlayer");
         socket.removeAllListeners("removePlayer");
+    },
+
+    initWaiting : function(self) {
+      // TODO display message
     },
 
     initPlayers : function(self, players) {

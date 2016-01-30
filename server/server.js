@@ -28,7 +28,6 @@ setInterval(update, 1000);
 
 var state = GameState.LOBBY;
 var players = [];
-var waitingPlayers = [];
 var hasSpy = false;
 
 function init() {
@@ -81,7 +80,7 @@ function onSocketConnection(client) {
     client.on("disconnect", onClientDisconnection);
 
     // Lobby messages
-    client.on("lobby", onLobby);
+    //client.on("lobby", onLobby);
     client.on("lobbyReady", onLobbyReady);
 
     // Game messages
@@ -90,6 +89,11 @@ function onSocketConnection(client) {
     client.on("stand", onStandEmitted);
     client.on("marked", onMarkedEmitted);
     client.on("error", onErrorEmitted);
+
+    if (state == GameState.LOBBY)
+        createPlayer(client);
+    else
+        createWaitingPlayer(client);
 }
 
 
@@ -164,18 +168,18 @@ function createPlayer(client) {
 }
 
 function createWaitingPlayer(client) {
-    waitingPlayers.push(client);
+    client.emit("initLobbyWaiting");
 }
 
-function onLobby() {
-    console.log("lobby from " + this.id);
-
-    if (state === GameState.LOBBY) {
-        createPlayer(this);
-    } else {
-        createWaitingPlayer(this);
-    }
-}
+//function onLobby() {
+//    console.log("lobby from " + this.id);
+//
+//    if (state === GameState.LOBBY) {
+//        createPlayer(this);
+//    } else {
+//        createWaitingPlayer(this);
+//    }
+//}
 
 function onLobbyReady() {
     // TODO return to lobby state on 0 player
@@ -276,9 +280,14 @@ function onMoveEmitted(direction) {
 function returnToLobby() {
     state = GameState.LOBBY;
     colors = [1, 2, 3, 4, 5, 6];
-    io.emit("returnToLobby");
     players = [];
-    waitingPlayers = [];
+
+    var sockets = io.sockets.connected;
+
+    Object.keys(sockets).forEach(function(s) {
+        console.log("Disconnecting client " + s);
+        sockets[s].disconnect();
+    });
 }
 
 function onClientDisconnection(client) {

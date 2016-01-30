@@ -4,12 +4,15 @@ game.MainScreen = me.ScreenObject.extend({
         this.font = new me.Font("Verdana", 12, "#fff", "center");
     },
 
-     onDestroyEvent : function() {
+    onDestroyEvent: function () {
         me.game.world.removeChild(this.HUD);
         me.game.world.removeChild(this.player);
 
+        game.data.localSpy = false;
 
         var socket = global.network.socket;
+        if (!socket) return;
+
         socket.removeAllListeners("returnToLobby");
         socket.removeAllListeners("refreshPlayer");
         socket.removeAllListeners("scoreUpdate");
@@ -27,7 +30,7 @@ game.MainScreen = me.ScreenObject.extend({
 
         me.levelDirector.loadLevel("area01");
 
-        setTimeout(function() {
+        setTimeout(function () {
 
             if (me.game.HASH.debug === true) {
                 console.log("player init.");
@@ -76,7 +79,6 @@ game.MainScreen = me.ScreenObject.extend({
             game.data.time = score.time;
         });
 
-        
 
         global.network.socket.on("removePlayer", function (playerId) {
             var player = game.functions.playerById(playerId);
@@ -84,17 +86,17 @@ game.MainScreen = me.ScreenObject.extend({
             game.data.players[playerId] = null;
         });
 
-         global.network.socket.on("victory",function(playerId){
-            game.data.victory = true; 
+        global.network.socket.on("victory", function (playerId) {
+            game.data.victory = true;
             game.data.ended = true;
         });
 
-          global.network.socket.on("defeat",function(playerId){
+        global.network.socket.on("defeat", function (playerId) {
             game.data.defeat = true;
             game.data.ended = true;
         });
 
-         me.levelDirector.loadLevel("area01");
+        me.levelDirector.loadLevel("area01");
 
 
         me.input.bindKey(me.input.KEY.LEFT, "left");
