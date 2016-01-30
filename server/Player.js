@@ -7,10 +7,28 @@ var Player = function(id, name, spriteIdx) {
         animation = "stand",
         direction = "right",
         isSpy = false, 
+        isDead = false,
         spriteIndex = spriteIdx, 
         marks = [],
         markedPlayer = "";
 
+        var setAnim = function(name) {
+            if(isDead)
+                return;
+            this.animation = name;
+        }
+
+        var addMark = function(name) {
+            console.log("Marking "+name);
+            marks.push(name);
+            if(marks.length >= 2){
+                console.log("Killing "+name);
+                this.isDead = true;
+                this.animation = "dead"
+            }
+        }        
+    
+    
   
 
   
@@ -24,7 +42,10 @@ var Player = function(id, name, spriteIdx) {
         animation: animation,
         direction: direction,
         spriteIndex : spriteIndex, 
-        marks : marks
+        marks : marks,
+        isDead : isDead,
+        addMark : addMark,
+        setAnim : setAnim
     }
 };
 

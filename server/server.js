@@ -75,29 +75,22 @@ function playerById(id) {
 }
 
 function onMarkedEmitted(playerMarked) {
-    console.log("Marking "+playerMarked)
     var markedPlayer = playerById(playerMarked);
     var markingPlayer = playerById(this.id);
     if(!markedPlayer || !markingPlayer){
         return;
     }
     var previousMarkedPlayer = playerById(markingPlayer.markedPlayer);
-    console.log("Unmarking "+markingPlayer.markedPlayer)
     if(previousMarkedPlayer){
         var idx = previousMarkedPlayer.marks.indexOf(this.id);
         previousMarkedPlayer.marks.splice(idx,1);
-        console.log("Refreshing")
         io.emit("refreshPlayer",previousMarkedPlayer);
     }
     if(!markedPlayer.marks){
         markedPlayer.marks = [];
     }
-    console.log("Setting Marks")
-    markedPlayer.marks.push(this.id);
-    console.log("Setting marked")
+    markedPlayer.addMark(this.id);
     markingPlayer.markedPlayer = playerMarked;
-    console.log("Refreshing");
-    console.log(markedPlayer);
     io.emit("refreshPlayer",markedPlayer);
 }
 
@@ -140,7 +133,7 @@ function onStandEmitted(value) {
     var player = playerById(this.id);
     player.stand = value;
     if (value == true)
-        player.animation = "stand";
+        player.setAnim("stand");
     io.emit("refreshPlayer", player);
 }
 
@@ -149,11 +142,11 @@ function onDanceEmitted(value) {
     if (value) {
         player.dancing = true;
         player.stand = false;
-        player.animation = "dance1";
+        player.setAnim("dance1");
     } else {
         player.dancing = false;
         player.stand = true;
-        player.animation = "stand";
+        player.setAnim("stand");
     }
 
     io.emit("refreshPlayer", player);
@@ -166,19 +159,19 @@ function onMoveEmitted(direction) {
    switch (direction)
         {
             case "up":
-                player.animation = "walk";
+                player.setAnim("walk");
                 player.y = player.y - offset;
                 break;
             case "down":
-                player.animation = "walk";
+                player.setAnim("walk");
                 player.y = player.y + offset;
                 break;
             case "left":
-                player.animation = "walk";
+                player.setAnim("walk");
                 player.x = player.x - offset;
                 break;
             case "right":
-                player.animation = "walk";
+                player.setAnim("walk");
                 player.x = player.x + offset;
                 break;
         }
