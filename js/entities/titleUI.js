@@ -4,12 +4,12 @@
 
 game.TitleUI = game.TitleUI || {};
 
-
 game.TitleUI.Container = me.Container.extend({
 
     init: function() {
         // call the constructor
-        this._super(me.Container, 'init');
+        this._super(me.Container, 'init',
+            [0, 0, me.game.viewport.width, me.game.viewport.height]);
 
         // persistent across level change
         this.isPersistent = false;
@@ -23,16 +23,53 @@ game.TitleUI.Container = me.Container.extend({
         // give a name
         this.name = "TitleUI";
 
-        this.font = new me.Font("Arial", 18, "#ffffff");
+        this.font = new me.BitmapFont("32x32_font", 32);
 
-        // TODO update from game.data
-        // add our child score object at the top left corner
-        this.addChild(new game.TitleUI.PlayerItem(100, 20, this.font, "player1"));
-        this.addChild(new game.TitleUI.PlayerItem(100, 60, this.font, "player2"));
-        this.addChild(new game.TitleUI.PlayerItem(100, 100, this.font, "player3"));
+        this.numChildren = 0;
+
+    },
+
+    addPlayer: function(self, player, index) {
+        self.numChildren++;
+
+        if (me.game.HASH.debug === true)
+            console.log("TitleUI.addPlayer numChildren = " + this.numChildren);
+
+        var playerItem =
+            new game.TitleUI.PlayerItem(
+                self.width / 2,
+                32 + index * 64,
+                self.font,
+                player.name,
+                player.id);
+
+        if (me.game.HASH.debug === true)
+            console.log("addChild " + playerItem);
+        self.addChild(playerItem);
     },
 
     update: function() {
+        this._super(me.Container, 'update');
+
+        if (!game.data.playersDirty) return false;
+
+        game.data.playersDirty = false;
+
+        if (me.game.HASH.debug === true)
+            console.log("TitleUI.update numChildren = " + this.numChildren);
+
+        while(this.numChildren > 0) {
+            this.numChildren--;
+            this.removeChildNow(this.getChildAt(0));
+        }
+
+        var self = this;
+        var index = 0;
+        Object.keys(game.data.players).forEach(function(id) {
+            self.addPlayer(self, game.data.players[id], index++);
+        });
+
+        return true;
     }
 });
 
@@ -46,11 +83,11 @@ game.TitleUI.PlayerItem = me.Renderable.extend({
     /**
      * constructor
      */
-    init: function(x, y, font, playerName) {
+    init: function(x, y, font, playerName, id) {
 
         // call the parent constructor
         // (size does not matter here)
-        this._super(me.Renderable, 'init', [x, y, 10, 10]);
+        this._super(me.Renderable, 'init', [x, y, 256, 256]);
 
         this.playerName = playerName;
 
@@ -59,6 +96,10 @@ game.TitleUI.PlayerItem = me.Renderable.extend({
         this.x = x;
 
         this.y = y;
+
+        this.name = id;
+
+        this.anchorPoint = new me.Vector2d(0.5, 0.5);
     },
 
     /**

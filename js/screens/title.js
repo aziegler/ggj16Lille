@@ -2,6 +2,14 @@ game.TitleScreen = me.ScreenObject.extend({
 
     onResetEvent : function() {
 
+        global.network.socket = io('http://localhost:3000');
+
+        var socket = global.network.socket;
+
+        socket.emit("lobby");
+
+
+
         // title screen
         me.game.world.addChild(
             new me.Sprite(
@@ -62,6 +70,12 @@ game.TitleScreen = me.ScreenObject.extend({
                 me.state.change(me.state.PLAY);
             }
         });
+
+        // Register network event handlers (once all receivers are init'ed)
+        var self = this;
+        socket.on("initLobby", function(p) { self.initPlayers(self, p); });
+        socket.on("lobbyAddPlayer", function(p) { self.addPlayer(self, p); });
+        socket.on("removePlayer", function(p) { self.removePlayer(self, p); });
     },
 
     /**
@@ -72,5 +86,28 @@ game.TitleScreen = me.ScreenObject.extend({
         //me.input.unbindPointer(me.input.mouse.LEFT);
         me.event.unsubscribe(this.handler);
         me.game.world.removeChild(this.TitleUI);
+
+        socket.removeAllListeners("initLobby");
+        socket.removeAllListeners("lobbyAddPlayer");
+        socket.removeAllListeners("removePlayer");
+    },
+
+    initPlayers : function(self, players) {
+        for(var i = 0; i < players.length; i++)
+            self.addPlayer(self, players[i]);
+    },
+
+    addPlayer : function(self, player) {
+        if (me.game.HASH.debug === true)
+            console.log("socket addPlayer " + player.id);
+        game.data.players[player.id] = player;
+        game.data.playersDirty = true;
+    },
+
+    removePlayer : function(self, playerId) {
+        if (me.game.HASH.debug === true)
+            console.log("socket removePlayer " + playerId);
+        delete game.data.players[playerId];
+        game.data.playersDirty = true;
     }
 });
