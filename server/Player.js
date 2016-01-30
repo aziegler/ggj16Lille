@@ -3,7 +3,9 @@ var Player = function(id, name) {
         y = 0,
         id = id,
         name = name, 
-        dancing = false, 
+        dancing = false,
+        animation = "stand",
+        direction = "",
         isSpy = false;
 
   
@@ -15,7 +17,9 @@ var Player = function(id, name) {
         name: name,
         x: x, 
         y: y, 
-        dancing: dancing
+        dancing: dancing,
+        animation: animation,
+        direction: direction
     }
 };
 

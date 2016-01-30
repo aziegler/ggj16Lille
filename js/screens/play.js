@@ -1,4 +1,5 @@
 game.PlayScreen = me.ScreenObject.extend({
+
     /**
      *  action to perform on state change
      */
@@ -7,6 +8,7 @@ game.PlayScreen = me.ScreenObject.extend({
 
 
         game.data.score = 0;
+        game.data.rituel.gaugeCurrentValue = game.data.rituel.gaugeStartValue;
      
         // add our HUD to the game world
         this.HUD = new game.HUD.Container();

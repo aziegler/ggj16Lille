@@ -10,27 +10,33 @@ game.MainScreen = me.ScreenObject.extend({
         global.network.socket.emit("start");
         global.network.socket.on("playerCreated",function(playerInfo){
             var player = me.pool.pull("mainPlayer",playerInfo.x, playerInfo.y, playerInfo.id);
-            console.log(player.id);
              me.game.world.addChild(player);
              game.data.players[playerInfo.id] = player;
-             console.log(game.data.players);
             
-
         });
-        global.network.socket.on("playerPosition",function(playerInfo){
-            var player = game.functions.playerById(playerInfo.id);
-            player.pos.x = playerInfo.x;
-            player.pos.y = playerInfo.y;
-        })
+
+        global.network.socket.on("playerPosition",function(infos){
+            var player = game.functions.playerById(infos.id);
+            player.updatePosition(infos.x, infos.y);
+        });
 
         global.network.socket.on("scoreUpdate",function(score){
             game.data.score = score.gauge;
             game.data.time = score.time;
-        })
+        });
+
+        global.network.socket.on("playerAnimation",function(infos){
+            var player = game.functions.playerById(infos.id);
+                player.trySetAnim(infos.anim);
+        });
+        global.network.socket.on("playerDirection",function(infos){
+            var player = game.functions.playerById(infos.id);
+                 player.setDirection(infos.dirName);
+        });
 
          global.network.socket.on("spy",function(){
             game.data.localSpy = true;
-        })
+        });
 
          me.levelDirector.loadLevel("area01");
 

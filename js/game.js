@@ -19,7 +19,15 @@ var game = {
 
         time : 100,
 
-        localSpy : false
+        localSpy : false,
+
+        rituel: {
+            gaugeStartValue: 50,
+            gaugeCurrentValue: 50,
+            gaugeMaxValue: 100,
+            goodRitualInc: +1,
+            badRitualInc: -2,
+        }
     },
     functions: {
         playerById: function(id) {
