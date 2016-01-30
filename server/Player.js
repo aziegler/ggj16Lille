@@ -1,4 +1,4 @@
-var Player = function(id, name) {
+var Player = function(id, name, spriteIdx) {
     var x = 0,
         y = 0,
         id = id,
@@ -6,7 +6,8 @@ var Player = function(id, name) {
         dancing = false,
         animation = "stand",
         direction = "right",
-        isSpy = false;
+        isSpy = false, 
+        spriteIndex = spriteIdx;
 
   
 
@@ -19,7 +20,8 @@ var Player = function(id, name) {
         y: y, 
         dancing: dancing,
         animation: animation,
-        direction: direction
+        direction: direction,
+        spriteIndex : spriteIndex
     }
 };
 

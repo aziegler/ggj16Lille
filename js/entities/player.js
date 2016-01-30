@@ -1,13 +1,14 @@
 game.PlayerEntity = me.Entity.extend({
 
 
-    init: function(x, y) {
+    init: function(x, y, playerIdx) {
 
         this.direction = "right";
         this.animation = 'stand';
 
         var settings = {};
-        settings.image = me.loader.getImage('placeholderchara');
+        var imageName = "placeholderchara"+playerIdx
+        settings.image = me.loader.getImage(imageName);
         settings.width = 64;
         settings.height = 64;
         // call the constructor

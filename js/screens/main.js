@@ -11,9 +11,9 @@ game.MainScreen = me.ScreenObject.extend({
         global.network.socket.on("playerCreated",function(playerInfo){
             console.log("player Creation ");
             console.log(playerInfo);
-            var player = me.pool.pull("mainPlayer",playerInfo.x, playerInfo.y, playerInfo.id);
-             me.game.world.addChild(player);
-             game.data.players[playerInfo.id] = player;
+            var player = me.pool.pull("mainPlayer",playerInfo.x, playerInfo.y, playerInfo.spriteIndex);
+            me.game.world.addChild(player);
+            game.data.players[playerInfo.id] = player;
             
         });
 
