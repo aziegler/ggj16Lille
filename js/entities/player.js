@@ -1,9 +1,14 @@
 game.PlayerEntity = me.Entity.extend({
 
-    init: function(x, y, settings) {
+    init: function(x, y) {
+        var settings = {};
+        settings.image = me.loader.getImage('walk_side');
+        settings.width = 64;
+        settings.height = 64;
         // call the constructor
         this._super(me.Entity, 'init', [x, y, settings]);
 
+        this.renderable = new me.AnimationSheet(x,y,settings);
         // set the default horizontal & vertical speed (accel vector)
         this.body.setVelocity(3, 15);
 
@@ -39,7 +44,6 @@ game.PlayerEntity = me.Entity.extend({
     },
 
     update: function(dt) {
-
         if (me.input.isKeyPressed('left')) {
             x = -1;
             // update the entity velocity
@@ -109,7 +113,6 @@ game.PlayerEntity = me.Entity.extend({
 
         // handle collisions against other shapes
         me.collision.check(this);
-
         // return true if we moved or if the renderable was updated
         return (this._super(me.Entity, 'update', [dt]) || this.body.vel.x !== 0 || this.body.vel.y !== 0);
     },

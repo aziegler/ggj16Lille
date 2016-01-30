@@ -87,7 +87,7 @@ function onMoveEmitted(direction) {
 function onStartEmitted(client) {
     console.log("Start emitted");
     var newPlayer = new Player(this.id, "Player 1");
-    if(Math.random() < 0.7){
+    if(Math.random() < 0.3){
         newPlayer.isSpy = true;
         this.emit("spy");
     }

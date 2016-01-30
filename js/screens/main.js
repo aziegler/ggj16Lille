@@ -8,9 +8,11 @@ game.MainScreen = me.ScreenObject.extend({
          // Connect to server and set global reference to the socket that's connected
         global.network.socket  = io('http://localhost:3000');  
         global.network.socket.emit("start");
-        global.network.socket.on("playerCreated",function(player){
-            console.log(player);
-        })
+        global.network.socket.on("playerCreated",function(playerInfo){
+            var player = me.pool.pull("mainPlayer",playerInfo.x, playerInfo.y);
+             me.game.world.addChild(player);
+
+        });
         global.network.socket.on("playerPosition",function(player){
             console.log(player);
         })
