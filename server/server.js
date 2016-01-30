@@ -124,11 +124,13 @@ function onStartEmitted(client) {
 
 function onClientDisconnection(client) {
     var i;
+    var idToRemove = this.id;
     for (i = 0; i < players.length; i++) {
         if(players[i].id === this.id)
             break;
     };
     players.splice(i,1);
+    io.emit("removePlayer",idToRemove);
     return false;
 }
 
