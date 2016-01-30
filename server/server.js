@@ -40,7 +40,8 @@ function onSocketConnection(client) {
       client.on("disconnect",onClientDisconnection);
       client.on("start",onStartEmitted);
       client.on("move",onMoveEmitted);
-      client.on("dance",onDanceEmitted)
+      client.on("dance",onDanceEmitted);
+      client.on("stand",onStandEmitted);
 }
 
 function playerById(id){
@@ -53,6 +54,12 @@ function playerById(id){
     return false;
 }
 
+function onStandEmitted(value) {
+    var player = playerById(this.id);
+    if(value == true)
+      io.emit("playerAnimation", {id:player.id, animation:"stand"});
+}
+
 function onDanceEmitted(value) {
     var player = playerById(this.id);
     if(value){
@@ -60,7 +67,9 @@ function onDanceEmitted(value) {
     }else{
         player.dancing = false;
     }
-    io.emit("playerPosition",player); 
+
+    if(player.dancing)
+        io.emit("playerAnimation", {id:player.id, animation:"dance"});
 }
 
 function onMoveEmitted(direction) {
@@ -80,7 +89,9 @@ function onMoveEmitted(direction) {
                 player.x = player.x + 10;
                 break;
         }
-    io.emit("playerPosition",player);    
+    io.emit("playerPosition", {id:player.id, x:player.x, y:player.y});
+    io.emit("playerDirection", {id:player.id, direction:direction});
+    io.emit("playerAnimation", {id:player.id, animation:"walk"});
 }
 
 
