@@ -38,7 +38,7 @@ function update() {
         return;
 
     for (var i = 0; i < players.length; i++) {
-        if (players[i].dancing) {
+        if (players[i].dancing && !players[i].isDead) {
             if (players[i].isSpy) {
                 gauge -= 30;
                 gauge = Math.max(gauge, 0);
@@ -228,8 +228,10 @@ function onDanceEmitted(value) {
     if (!player)
         return;
 
-    if (player.isDead)
+    if (player.isDead){
+        player.dancing = false;
         return;
+    }
     if (value) {
         player.dancing = true;
         player.stand = false;
