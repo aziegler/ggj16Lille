@@ -5,7 +5,7 @@ var Player = function(id, name) {
         name = name, 
         dancing = false,
         animation = "stand",
-        direction = "",
+        direction = "right",
         isSpy = false;
 
   

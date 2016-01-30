@@ -15,23 +15,14 @@ game.MainScreen = me.ScreenObject.extend({
             
         });
 
-        global.network.socket.on("playerPosition",function(infos){
+        global.network.socket.on("refreshPlayer",function(infos){
             var player = game.functions.playerById(infos.id);
-            player.updatePosition(infos.x, infos.y);
+            player.refresh(infos);
         });
 
         global.network.socket.on("scoreUpdate",function(score){
             game.data.score = score.gauge;
             game.data.time = score.time;
-        });
-
-        global.network.socket.on("playerAnimation",function(infos){
-            var player = game.functions.playerById(infos.id);
-                player.trySetAnim(infos.anim);
-        });
-        global.network.socket.on("playerDirection",function(infos){
-            var player = game.functions.playerById(infos.id);
-                 player.setDirection(infos.dirName);
         });
 
          global.network.socket.on("spy",function(){

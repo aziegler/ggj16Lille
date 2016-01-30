@@ -57,41 +57,46 @@ function playerById(id){
 function onStandEmitted(value) {
     var player = playerById(this.id);
     if(value == true)
-      io.emit("playerAnimation", {id:player.id, animation:"stand"});
+        player.animation = "stand";
+    io.emit("refreshPlayer", player);
 }
 
 function onDanceEmitted(value) {
     var player = playerById(this.id);
     if(value){
         player.dancing = true;
+        player.animation = "dance1";
     }else{
         player.dancing = false;
+        player.animation = "stand";
     }
 
-    if(player.dancing)
-        io.emit("playerAnimation", {id:player.id, animation:"dance"});
+    io.emit("refreshPlayer", player);
 }
 
 function onMoveEmitted(direction) {
     var player = playerById(this.id);
+    player.direction = direction;
    switch (direction)
         {
             case "up":
+                player.animation = "walk";
                 player.y = player.y - 10;
                 break;
             case "down":
+                player.animation = "walk";
                 player.y = player.y + 10;
                 break;
             case "left":
+                player.animation = "walk";
                 player.x = player.x - 10;
                 break;
             case "right":
+                player.animation = "walk";
                 player.x = player.x + 10;
                 break;
         }
-    io.emit("playerPosition", {id:player.id, x:player.x, y:player.y});
-    io.emit("playerDirection", {id:player.id, direction:direction});
-    io.emit("playerAnimation", {id:player.id, animation:"walk"});
+    io.emit("refreshPlayer", player);
 }
 
 

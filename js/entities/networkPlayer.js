@@ -66,7 +66,7 @@ game.NetworkPlayer = me.Entity.extend({
         }
         if(this.stand != isStanding) {
             this.stand = isStanding;
-            global.network.socket.emit("animation", "stand");
+            global.network.socket.emit("stand", isStanding);
         }
     },
 

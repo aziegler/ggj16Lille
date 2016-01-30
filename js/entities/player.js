@@ -1,7 +1,7 @@
 game.PlayerEntity = me.Entity.extend({
 
 
-    init: function(x, y, id) {
+    init: function(x, y) {
 
         this.direction = "right";
         this.animation = 'stand';
@@ -41,28 +41,29 @@ game.PlayerEntity = me.Entity.extend({
     },
 
 
-    "updatePosition": function(x, y) {
-        this.body.x = x;
-        this.body.y = y;
-    },
+    refresh: function(playerInfo) {
+        this.pos.x = playerInfo.x;
+        this.pos.y = playerInfo.y;
 
-    "trySetAnim":function(anim) {
-        var dir = direction;
-        if(direction == "left" || direction == "right") {
+        var dir = playerInfo.direction;
+
+        this.renderable.flipX(dir == "left");
+
+        if(dir == "left" || dir == "right") {
             dir = "side";
         }
-        this.renderable.flipX(direction == "left");
-        animName = anim + "_" + dir;
+
+        var animName = playerInfo.animation + "_" + dir;
+        this.trySetAnim(animName);
+    },
+
+
+    trySetAnim:function(animName) {
 
         if (!this.renderable.isCurrentAnimation(animName)) {
             console.log("anim: " + animName);
             this.renderable.setCurrentAnimation(animName);
         }
-    },
-
-    "setDirection":function(dirName) {
-        direction = dirName;
-        trySetAnim(animation);
     },
 
 })
