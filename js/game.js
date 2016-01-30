@@ -35,7 +35,7 @@ var game = {
     },
     functions: {
         playerById: function (id) {
-            return game.data.lobbyPlayers[id];
+            return game.data.players[id];
         }
     },
 

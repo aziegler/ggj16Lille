@@ -4,39 +4,37 @@ game.MainScreen = me.ScreenObject.extend({
         this.font = new me.Font("Verdana", 12, "#fff", "center");
     },
 
-    onResetEvent : function () {
-         // Connect to server and set global reference to the socket that's connected
-        global.network.socket  = io('http://localhost:3000');
-        global.network.socket.emit("start");
-        global.network.socket.on("playerCreated",function(playerInfo){
+    onResetEvent: function () {
+        // Connect to server and set global reference to the socket that's connected
+        if (me.game.HASH.debug === true) {
+            console.log("gameStarted")
+        }
+
+        Object.keys(game.data.lobbyPlayers).forEach(function (id) {
+
+            var playerInfo = game.data.lobbyPlayers[id];
             if (me.game.HASH.debug === true) {
-                console.log("player Creation ");
-                console.log(playerInfo);
+                console.log("player added " + playerInfo.id)
             }
-            var player = me.pool.pull("mainPlayer",playerInfo.x, playerInfo.y, playerInfo.id, playerInfo.spriteIndex);
+            var player = me.pool.pull("mainPlayer", playerInfo.x, playerInfo.y, playerInfo.id, playerInfo.spriteIndex);
             me.game.world.addChild(player);
             game.data.players[playerInfo.id] = player;
-            if(this.id === playerInfo.id.substring(2)){
+            if (game.data.clientId === playerInfo.id.substring(2)) {
+                if (me.game.HASH.debug === true) {
+                    console.log("localPlayer added for " + game.data.clientId);
+                }
                 game.data.localPlayer = player;
             }
-            
+
         });
 
         game.data.lobbyPlayers = {};
 
-        //global.network.socket.emit("start");
-        //global.network.socket.on("playerCreated",function(playerInfo){
-        //    if (me.game.HASH.debug === true) {
-        //        console.log("player Creation ");
-        //        console.log(playerInfo);
-        //    }
-        //    var player = me.pool.pull("mainPlayer",playerInfo.x, playerInfo.y, playerInfo.id);
-        //     me.game.world.addChild(player);
-        //     game.data.lobbyPlayers[playerInfo.id] = player;
-        //
-        //});
-
         global.network.socket.on("refreshPlayer", function (infos) {
+            if (me.game.HASH.debug === true) {
+                console.log("refreshPlayer " + infos.id + "@" + infos.x + "," + infos.y);
+            }
+
             var player = game.functions.playerById(infos.id);
             if (player != null) {
                 player.refresh(infos);

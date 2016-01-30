@@ -48,20 +48,22 @@ function onSocketConnection(client) {
     client.on("disconnect", onClientDisconnection);
 
     // Lobby messages
-    client.on("lobby", function() { onLobby(client); });
+    client.on("lobby", function () {
+        onLobby(client);
+    });
     client.on("lobbyReady", onLobbyReady);
 
     // Game messages
-    client.on("start", onStartEmitted);
+    //client.on("start", onStartEmitted);
     client.on("move", onMoveEmitted);
     client.on("dance", onDanceEmitted);
     client.on("stand", onStandEmitted);
-    client.on("marked",onMarkedEmitted);
-    client.on("error",onErrorEmitted);
+    client.on("marked", onMarkedEmitted);
+    client.on("error", onErrorEmitted);
 }
 
 
-function onErrorEmitted(error){
+function onErrorEmitted(error) {
     console.log(error);
 }
 
@@ -76,23 +78,28 @@ function playerById(id) {
 }
 
 function onMarkedEmitted(playerMarked) {
+    console.log("Marking " + playerMarked)
     var markedPlayer = playerById(playerMarked);
     var markingPlayer = playerById(this.id);
-    if(!markedPlayer || !markingPlayer){
+    if (!markedPlayer || !markingPlayer) {
         return;
     }
     var previousMarkedPlayer = playerById(markingPlayer.markedPlayer);
-    if(previousMarkedPlayer){
+    console.log("Unmarking " + markingPlayer.markedPlayer)
+    if (previousMarkedPlayer) {
         var idx = previousMarkedPlayer.marks.indexOf(this.id);
-        previousMarkedPlayer.marks.splice(idx,1);
-        io.emit("refreshPlayer",previousMarkedPlayer);
+        previousMarkedPlayer.marks.splice(idx, 1);
+        console.log("Refreshing")
+        io.emit("refreshPlayer", previousMarkedPlayer);
     }
-    if(!markedPlayer.marks){
+    if (!markedPlayer.marks) {
         markedPlayer.marks = [];
     }
     markedPlayer.addMark(this.id);
     markingPlayer.markedPlayer = playerMarked;
-    io.emit("refreshPlayer",markedPlayer);
+    console.log("Refreshing");
+    console.log(markedPlayer);
+    io.emit("refreshPlayer", markedPlayer);
 }
 
 function createPlayer(client) {
@@ -101,12 +108,13 @@ function createPlayer(client) {
     var num = 1;
     while (true) {
         var newName = "PLAYER " + num;
-        if (players.every(function(p){ return p.name !== newName}))
+        if (players.every(function (p) {
+                return p.name !== newName
+            }))
             break;
 
         num++;
     }
-
 
 
     // TODO select spy at game start instead
@@ -115,7 +123,8 @@ function createPlayer(client) {
     console.log("Create player #" + num + " [spy: " + spy + "]");
 
     // Create and store object
-    var newPlayer = new Player(client.id, "PLAYER " + num);
+    var newPlayer = new Player(client.id, "PLAYER " + num,
+        Math.floor((Math.random() * 6) + 1));
     newPlayer.isSpy = spy;
     hasSpy |= spy;
     players.push(newPlayer);
@@ -131,7 +140,13 @@ function onLobby(client) {
 }
 
 function onLobbyReady() {
+    // TODO return to lobby state on 0 player
+    //if (state !== GameState.LOBBY)
+    //    return;
     console.log("lobby ready");
+    players.forEach(function(p){
+       console.log("player " + p.id);
+    });
     io.emit("gameStart");
 }
 
@@ -191,26 +206,25 @@ function onMoveEmitted(direction) {
 }
 
 
-
-function onStartEmitted(client) {
-    var idx = Math.floor((Math.random() * 6) + 1); 
-    var newPlayer = new Player(this.id, "Player 1", idx);
-    if(!hasSpy && Math.random() < 0.3){
-        newPlayer.isSpy = true;
-        this.emit("spy");
-        hasSpy = true;
-    }
-    if (!players)
-        players = [];
-    var i;
-    for (i = 0; i < players.length; i++) {
-        console.log(players[i]);
-        this.emit("playerCreated", players[i]);
-    }
-    players.push(newPlayer);
-    io.emit("playerCreated", newPlayer);
-    this.emit("scoreUpdate", {"gauge": gauge, "time": timer});
-}
+//function onStartEmitted(client) {
+//    var idx = Math.floor((Math.random() * 6) + 1);
+//    var newPlayer = new Player(this.id, "Player 1", idx);
+//    if (!hasSpy && Math.random() < 0.3) {
+//        newPlayer.isSpy = true;
+//        this.emit("spy");
+//        hasSpy = true;
+//    }
+//    if (!players)
+//        players = [];
+//    var i;
+//    for (i = 0; i < players.length; i++) {
+//        console.log(players[i]);
+//        this.emit("playerCreated", players[i]);
+//    }
+//    players.push(newPlayer);
+//    io.emit("playerCreated", newPlayer);
+//    this.emit("scoreUpdate", {"gauge": gauge, "time": timer});
+//}
 
 function onClientDisconnection(client) {
     console.log("Client disconnection from " + this.id);

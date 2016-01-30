@@ -77,7 +77,10 @@ game.TitleScreen = me.ScreenObject.extend({
         socket.on("initLobby", function(p) { self.initPlayers(self, p); });
         socket.on("lobbyAddPlayer", function(p) { self.addPlayer(self, p); });
         socket.on("removePlayer", function(p) { self.removePlayer(self, p); });
-        socket.on("gameStart", function() { me.state.change(me.state.READY); });
+        socket.on("gameStart", function() {
+            game.data.clientId = this.id;
+            me.state.change(me.state.READY);
+        });
     },
 
     /**
