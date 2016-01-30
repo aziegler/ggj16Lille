@@ -243,6 +243,7 @@ function onMoveEmitted(direction) {
     if (player.isDead)
         return;
     player.direction = direction;
+    player.dancing = false;            
     var offset = 7;
     switch (direction) {
         case "up":
@@ -262,6 +263,8 @@ function onMoveEmitted(direction) {
             player.x = player.x + offset;
             break;
     }
+    player.y = Math.max(-10,Math.min(player.y,419));
+    player.x = Math.max(-10,Math.min(player.x,584));
     io.emit("refreshPlayer", player);
 }
 
