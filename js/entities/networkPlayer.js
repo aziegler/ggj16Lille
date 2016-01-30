@@ -52,12 +52,11 @@ game.NetworkPlayer = me.Entity.extend({
         }
 
         if (me.input.isKeyPressed("dance")) {
-            console.log(this.dancing);
             if (!this.dancing) {
                 this.dancing = true;
                 global.network.socket.emit("dance", true);
-                isStanding = false;
             }
+            isStanding = false;
         } else {
             if (this.dancing) {
                 this.dancing = false;

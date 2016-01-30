@@ -56,6 +56,7 @@ function playerById(id){
 
 function onStandEmitted(value) {
     var player = playerById(this.id);
+    player.stand = value;
     if(value == true)
         player.animation = "stand";
     io.emit("refreshPlayer", player);
@@ -65,9 +66,11 @@ function onDanceEmitted(value) {
     var player = playerById(this.id);
     if(value){
         player.dancing = true;
+        player.stand = false;
         player.animation = "dance1";
     }else{
         player.dancing = false;
+        player.stand = true;
         player.animation = "stand";
     }
 
@@ -77,23 +80,24 @@ function onDanceEmitted(value) {
 function onMoveEmitted(direction) {
     var player = playerById(this.id);
     player.direction = direction;
+    var offset = 10;
    switch (direction)
         {
             case "up":
                 player.animation = "walk";
-                player.y = player.y - 10;
+                player.y = player.y - offset;
                 break;
             case "down":
                 player.animation = "walk";
-                player.y = player.y + 10;
+                player.y = player.y + offset;
                 break;
             case "left":
                 player.animation = "walk";
-                player.x = player.x - 10;
+                player.x = player.x - offset;
                 break;
             case "right":
                 player.animation = "walk";
-                player.x = player.x + 10;
+                player.x = player.x + offset;
                 break;
         }
     io.emit("refreshPlayer", player);
