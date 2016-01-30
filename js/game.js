@@ -48,7 +48,7 @@ var game = {
     "onload" : function () {
 
         // Initialize the video.
-        if (!me.video.init(640, 480, {wrapper : "screen", scale : "auto"})) {
+        if (!me.video.init(global.WIDTH, global.HEIGHT, {wrapper : "screen", scale : "auto"})) {
             alert("Your browser does not support HTML5 canvas.");
             return;
         }
@@ -98,6 +98,7 @@ var game = {
         me.input.bindKey(me.input.KEY.RIGHT, "right");
         me.input.bindKey(me.input.KEY.UP, "up");
         me.input.bindKey(me.input.KEY.DOWN, "down");
+        me.input.bindKey(me.input.KEY.X, "dance", true);
         me.input.bindKey(me.input.KEY.SPACE, "carry", true);
 
         // start the game
