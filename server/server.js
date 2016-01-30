@@ -137,7 +137,7 @@ function createPlayer(client) {
 }
 
 function onLobby(client) {
-    if (state != GameState.LOBBY)
+    if (state !== GameState.LOBBY)
         return;
 
     console.log("lobby from " + client.id);
@@ -157,7 +157,7 @@ function onLobbyReady() {
     });
     console.log("gameStart sent.")
     io.emit("gameStart");
-
+    io.emit("scoreUpdate", {"gauge": gauge, "time": timer});
 }
 
 function onStandEmitted(value) {

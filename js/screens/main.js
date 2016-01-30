@@ -34,18 +34,21 @@ game.MainScreen = me.ScreenObject.extend({
                     game.data.localPlayer = player;
                 }
 
+
             });
+
+            game.data.lobbyPlayers = {};
         }, 500);
 
-        game.data.lobbyPlayers = {};
 
         global.network.socket.on("refreshPlayer", function (infos) {
+            var player = game.functions.playerById(infos.id);
+
             if (me.game.HASH.debug === true) {
-                console.log("refreshPlayer " + infos.id + "@" + infos.x + "," + infos.y);
+                console.log("refreshPlayer " + player.playerId + "@" + infos.x + "," + infos.y);
             }
 
-            var player = game.functions.playerById(infos.id);
-            if (player != null) {
+            if (player) {
                 player.refresh(infos);
             }
         });
