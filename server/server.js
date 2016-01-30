@@ -140,15 +140,11 @@ function createPlayer(client) {
 
 
     // TODO select spy at game start instead
-    var spy = !hasSpy && Math.random() < 3;
-
-    console.log("Create player #" + num + " [spy: " + spy + "]");
+    
 
     // Create and store object
     var newPlayer = new Player(client.id, "PLAYER " + num,
         Math.floor((Math.random() * 6) + 1));
-    newPlayer.isSpy = spy;
-    hasSpy |= spy;
     players.push(newPlayer);
 
     // Emit player info
@@ -171,7 +167,10 @@ function onLobbyReady() {
 
     state = GameState.RITUAL;
 
-    console.log("lobby ready");
+    var spyIdx = Math.floor((Math.random() * players.length));
+    console.log("Spy : "+spyIdx+"/"+players.length);
+    players[spyIdx].isSpy = true;
+    io.to(players[spyIdx].id).emit("spy");
     players.forEach(function(p){
        console.log("player " + p.id);
     });

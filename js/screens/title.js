@@ -84,6 +84,11 @@ game.TitleScreen = me.ScreenObject.extend({
             game.data.clientId = this.id;
             me.state.change(me.state.READY);
         });
+        socket.on("spy", function () {
+            console.log("isSpy");
+            game.data.localSpy = true;
+   //         game.data.localPlayer.isSpy = true;
+        });
     },
 
     /**

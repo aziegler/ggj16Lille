@@ -40,7 +40,7 @@ game.HUD.Result = me.Renderable.extend( {
         this._super(me.Renderable, 'init', [x, y, 300, 10]);
 
         // create a font
-        this.font = new me.Font("Arial", 40, "#ffffff");
+        this.font = new me.Font("Arial", 18, "#ffffff");
         
 
         // local copy of the global score

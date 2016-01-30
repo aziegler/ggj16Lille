@@ -58,9 +58,7 @@ game.MainScreen = me.ScreenObject.extend({
             game.data.time = score.time;
         });
 
-        global.network.socket.on("spy", function () {
-            game.data.localSpy = true;
-        });
+        
 
         global.network.socket.on("removePlayer", function (playerId) {
             var player = game.functions.playerById(playerId);
