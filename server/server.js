@@ -1,10 +1,14 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Player = require("./Player").Player;
 
 var gauge = 0;
 var timer = 100;
+
+app.use(express.static(__dirname + '/public'));
+
 
 app.get('/', function(req, res){
   res.sendfile('index.html');
@@ -15,6 +19,7 @@ io.on('connection', onSocketConnection);
 setInterval(update,1000);
 
 var players = [];
+var hasSpy = false;
 
 function init() {
     players = [];
@@ -100,6 +105,7 @@ function onMoveEmitted(direction) {
                 player.x = player.x + offset;
                 break;
         }
+    console.log("player : "+player.x+" "+player.y)
     io.emit("refreshPlayer", player);
 }
 
@@ -107,14 +113,16 @@ function onMoveEmitted(direction) {
 function onStartEmitted(client) {
     console.log("Start emitted");
     var newPlayer = new Player(this.id, "Player 1");
-    if(Math.random() < 0.3){
+    if(!hasSpy && Math.random() < 0.3){
         newPlayer.isSpy = true;
         this.emit("spy");
+        hasSpy = true;
     }
     if(!players)
         players = [];
      var i;
     for (i = 0; i < players.length; i++) {
+        console.log(players[i]);
         this.emit("playerCreated",players[i]);
     };
     players.push(newPlayer);
@@ -129,6 +137,8 @@ function onClientDisconnection(client) {
         if(players[i].id === this.id)
             break;
     };
+    if(players[i].isSpy)
+        hasSpy = false;
     players.splice(i,1);
     io.emit("removePlayer",idToRemove);
     return false;

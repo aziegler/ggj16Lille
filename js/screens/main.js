@@ -34,7 +34,7 @@ game.MainScreen = me.ScreenObject.extend({
         global.network.socket.on("removePlayer",function(playerId){
             var player = game.functions.playerById(playerId);
             me.game.world.removeChild(player);
-            game.data.players[playerId] = nil;
+            game.data.players[playerId] = null;
         });
 
          me.levelDirector.loadLevel("area01");

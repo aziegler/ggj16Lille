@@ -11,7 +11,7 @@ module.exports = function(grunt) {
           'build/js/resources.js',
           'js/**/*.js',
         ],
-        dest: 'build/js/app.js'
+        dest: 'server/public/js/app.js'
       }
     },
 
@@ -19,31 +19,31 @@ module.exports = function(grunt) {
       dist: {
         files: [{
           src: 'index.css',
-          dest: 'build/index.css'
+          dest: 'server/public/index.css'
         },{
           src: 'main.js',
-          dest: 'build/main.js'
+          dest: 'server/public/main.js'
         },{
           src: 'manifest.json',
-          dest: 'build/manifest.json'
+          dest: 'server/public/manifest.json'
         },{
           src: 'package.json',
-          dest: 'build/package.json'
+          dest: 'server/public/package.json'
         },{
           src: 'data/**/*',
-          dest: 'build/',
+          dest: 'server/public/',
           expand: true
         },{
           src: 'icons/*',
-          dest: 'build/',
+          dest: 'server/public/',
           expand: true
         }]
       }
     },
 
     clean: {
-      app: ['build/js/app.js'],
-      dist: ['build/','bin/'],
+      app: ['server/public/js/app.js'],
+      dist: ['server/public/','bin/'],
     },
 
     processhtml: {
@@ -55,7 +55,7 @@ module.exports = function(grunt) {
           }
         },
         files: {
-          'build/index.html': ['index.html']
+          'server/public/index.html': ['index.html']
         }
       }
     },
@@ -74,8 +74,8 @@ module.exports = function(grunt) {
         },
         files : [
           {
-            src : [ 'build/js/app.js' ],
-            dest : 'build/js/app.js'
+            src : [ 'server/public/js/app.js' ],
+            dest : 'server/public/js/app.js'
           }
         ]
       },
@@ -88,8 +88,8 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'build/js/app.min.js': [
-            'build/js/app.js'
+          'server/public/js/app.min.js': [
+            'server/public/js/app.js'
           ]
         }
       }
@@ -104,24 +104,7 @@ module.exports = function(grunt) {
       }
     },
 
-    'download-electron': {
-      version: '0.35.4',
-      outputDir: 'bin',
-      rebuild: false,
-    },
-
-    asar: {
-      dist: {
-        cwd: 'build',
-        src: ['**/*', '!js/app.js'],
-        expand: true,
-        dest: 'bin/' + (
-          process.platform === 'darwin'
-            ? 'Electron.app/Contents/Resources/'
-            : 'resources/'
-        ) + 'app.asar'
-      },
-    },
+    
 
     resources: {
       dist: {
@@ -168,8 +151,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-processhtml');
   grunt.loadNpmTasks("grunt-replace");
   grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-download-electron');
-  grunt.loadNpmTasks('grunt-asar');
+ // grunt.loadNpmTasks('grunt-download-electron');
+  //grunt.loadNpmTasks('grunt-asar');
 
   // Custom Tasks
   grunt.loadTasks('tasks');
@@ -183,6 +166,6 @@ module.exports = function(grunt) {
     'processhtml',
     'clean:app',
   ]);
-  grunt.registerTask('dist', ['default', 'download-electron', 'asar']);
+  grunt.registerTask('dist', ['default']);
   grunt.registerTask('serve', ['resources', 'connect', 'watch']);
 }
