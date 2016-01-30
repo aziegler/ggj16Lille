@@ -25,7 +25,9 @@ var Player = function (id, name, spriteIdx) {
             console.log("Killing " + name);
             this.isDead = true;
             this.animation = "dead"
+            return true;
         }
+        return false;
     }
 
 

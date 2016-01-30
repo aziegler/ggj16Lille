@@ -20,6 +20,7 @@ game.MainScreen = me.ScreenObject.extend({
         socket.removeAllListeners("removePlayer");
         socket.removeAllListeners("victory");
         socket.removeAllListeners("defeat");
+        socket.removeAllListeners("killed");
     },
 
     onResetEvent: function () {
@@ -60,6 +61,10 @@ game.MainScreen = me.ScreenObject.extend({
 
         global.network.socket.on("returnToLobby", function () {
             me.state.change(me.state.MENU);
+        });
+
+        global.network.socket.on("killed", function () {
+            me.game.viewport.shake(15, 300, me.game.viewport.AXIS.BOTH);
         });
 
         global.network.socket.on("refreshPlayer", function (infos) {

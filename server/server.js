@@ -129,7 +129,10 @@ function onMarkedEmitted(playerMarked) {
     if (!markedPlayer.marks) {
         markedPlayer.marks = [];
     }
-    markedPlayer.addMark(this.id);
+    var isKilled = markedPlayer.addMark(this.id);
+    if (isKilled) {
+        io.emit("killed",markedPlayer);
+    }
     markingPlayer.markedPlayer = playerMarked;
     console.log("Refreshing");
     console.log(markedPlayer);
