@@ -42,12 +42,18 @@ function update(){
 }
 
 function onSocketConnection(client) {
-      console.log('a user connected');
       client.on("disconnect",onClientDisconnection);
       client.on("start",onStartEmitted);
       client.on("move",onMoveEmitted);
       client.on("dance",onDanceEmitted);
       client.on("stand",onStandEmitted);
+      client.on("marked",onMarkedEmitted);
+      client.on("error",onErrorEmitted);
+   
+}
+
+function onErrorEmitted(error){
+    console.log(error);
 }
 
 function playerById(id){
@@ -58,6 +64,33 @@ function playerById(id){
     };
 
     return false;
+}
+
+function onMarkedEmitted(playerMarked) {
+    console.log("Marking "+playerMarked)
+    var markedPlayer = playerById(playerMarked);
+    var markingPlayer = playerById(this.id);
+    if(!markedPlayer || !markingPlayer){
+        return;
+    }
+    var previousMarkedPlayer = playerById(markingPlayer.markedPlayer);
+    console.log("Unmarking "+markingPlayer.markedPlayer)
+    if(previousMarkedPlayer){
+        var idx = previousMarkedPlayer.marks.indexOf(this.id);
+        previousMarkedPlayer.marks.splice(idx,1);
+        console.log("Refreshing")
+        io.emit("refreshPlayer",previousMarkedPlayer);
+    }
+    if(!markedPlayer.marks){
+        markedPlayer.marks = [];
+    }
+    console.log("Setting Marks")
+    markedPlayer.marks.push(this.id);
+    console.log("Setting marked")
+    markingPlayer.markedPlayer = playerMarked;
+    console.log("Refreshing");
+    console.log(markedPlayer);
+    io.emit("refreshPlayer",markedPlayer);
 }
 
 function onStandEmitted(value) {
@@ -106,13 +139,11 @@ function onMoveEmitted(direction) {
                 player.x = player.x + offset;
                 break;
         }
-    console.log("player : "+player.x+" "+player.y)
     io.emit("refreshPlayer", player);
 }
 
 
 function onStartEmitted(client) {
-    console.log("Start emitted");
     var idx = Math.floor((Math.random() * 6) + 1); 
     var newPlayer = new Player(this.id, "Player 1", idx);
     if(!hasSpy && Math.random() < 0.3){

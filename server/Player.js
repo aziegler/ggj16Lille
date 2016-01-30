@@ -7,7 +7,9 @@ var Player = function(id, name, spriteIdx) {
         animation = "stand",
         direction = "right",
         isSpy = false, 
-        spriteIndex = spriteIdx;
+        spriteIndex = spriteIdx, 
+        marks = [],
+        markedPlayer = "";
 
   
 
@@ -21,7 +23,8 @@ var Player = function(id, name, spriteIdx) {
         dancing: dancing,
         animation: animation,
         direction: direction,
-        spriteIndex : spriteIndex
+        spriteIndex : spriteIndex, 
+        marks : marks
     }
 };
 

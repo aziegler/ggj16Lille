@@ -12,6 +12,8 @@ var game = {
     data : {
         players : {},
 
+        localPlayer : null,
+
         playersDirty: true,
 
         // score
