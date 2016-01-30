@@ -189,6 +189,8 @@ function createPlayer(client) {
 
     // Create and store object
     var newPlayer = new Player(client.id, "PLAYER " + num, color);
+    newPlayer.x = Math.floor(Math.random() * 594 - 10);
+    newPlayer.y = Math.floor(Math.random() * 419 - 10);
     players.push(newPlayer);
 
     // Emit player info
