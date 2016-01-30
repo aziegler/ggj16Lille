@@ -31,7 +31,10 @@ var game = {
             gaugeMaxValue: 100,
             goodRitualInc: +1,
             badRitualInc: -2
-        }
+        },
+        defeat : false,
+        ended : false,
+        victory : false
     },
     functions: {
         playerById: function (id) {

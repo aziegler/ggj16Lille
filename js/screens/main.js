@@ -68,6 +68,17 @@ game.MainScreen = me.ScreenObject.extend({
             game.data.players[playerId] = null;
         });
 
+         global.network.socket.on("victory",function(playerId){
+            game.data.victory = true; 
+            game.data.ended = true;
+        });
+
+          global.network.socket.on("defeat",function(playerId){
+            game.data.defeat = true;
+            game.data.ended = true;
+        });
+
+         me.levelDirector.loadLevel("area01");
 
 
         me.input.bindKey(me.input.KEY.LEFT, "left");

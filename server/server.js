@@ -4,8 +4,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Player = require("./Player").Player;
 
-var gauge = 0;
-var timer = 100;
+var gauge = 200;
+var timer = 300;
 
 app.use(express.static(__dirname + '/public'));
 
@@ -33,15 +33,35 @@ function update() {
     for (var i = 0; i < players.length; i++) {
         if (players[i].dancing) {
             if (players[i].isSpy) {
-                gauge -= 100;
+                gauge -= 30;
                 gauge = Math.max(gauge, 0);
             } else {
-                gauge += 10;
+                gauge += 8;
             }
         }
     }
     timer = timer - 1;
-    io.emit("scoreUpdate", {"gauge": gauge, "time": timer});
+    var end = checkGameEnded();
+    console.log("End ? "+end);
+        if(!end){
+            io.emit("scoreUpdate", {"gauge": gauge, "time": timer});
+        }
+    }
+
+function checkGameEnded(){
+    if(timer <= 0){
+        io.emit("defeat");
+        return true;
+    }
+    if(gauge > 400){
+        io.emit("victory");
+        return true;
+    }
+    if(gauge == 0){
+        io.emit("defeat");
+        return true;
+    }
+    return false;
 }
 
 function onSocketConnection(client) {
