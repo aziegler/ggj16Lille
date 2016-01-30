@@ -21,7 +21,7 @@ game.HUD.Container = me.Container.extend({
 
         // add our child score object at the right-bottom position
         this.addChild(new game.HUD.ScoreItem(630, 440));
-        this.addChild(new game.HUD.TimeItem(230, 440));
+     //   this.addChild(new game.HUD.TimeItem(230, 440));
         this.addChild(new game.HUD.Spy(430, 440));
     }
 });

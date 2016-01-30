@@ -13,7 +13,7 @@ game.PlayerEntity = me.Entity.extend({
         // call the constructor
         this._super(me.Entity, 'init', [x, y, settings]);
 
-        this.renderable = new me.AnimationSheet(x,y,settings);
+        this.renderable = new me.AnimationSheet(0,0,settings);
 
       
         // ensure the player is updated even when outside of the viewport
@@ -28,9 +28,9 @@ game.PlayerEntity = me.Entity.extend({
         this.renderable.addAnimation("walk_up",  [0]);
         this.renderable.addAnimation("walk_down",  [0]);
 
-        this.renderable.addAnimation("dance1_side",  [0]);
-        this.renderable.addAnimation("dance1_up",  [0]);
-        this.renderable.addAnimation("dance1_down",  [0]);
+        this.renderable.addAnimation("dance1_side",  [1]);
+        this.renderable.addAnimation("dance1_up",  [1]);
+        this.renderable.addAnimation("dance1_down",  [1]);
 
 
         this.renderable.addAnimation("carry",  [0]);
@@ -59,7 +59,6 @@ game.PlayerEntity = me.Entity.extend({
     trySetAnim:function(animName) {
 
         if (!this.renderable.isCurrentAnimation(animName)) {
-            console.log("anim: " + animName);
             this.renderable.setCurrentAnimation(animName);
         }
     },

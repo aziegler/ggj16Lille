@@ -6,9 +6,11 @@ game.MainScreen = me.ScreenObject.extend({
 
     onResetEvent : function () {
          // Connect to server and set global reference to the socket that's connected
-        global.network.socket  = io('http://localhost:3000');  
+        global.network.socket  = io('http://axle-ultrabook:3000');  
         global.network.socket.emit("start");
         global.network.socket.on("playerCreated",function(playerInfo){
+            console.log("player Creation ");
+            console.log(playerInfo);
             var player = me.pool.pull("mainPlayer",playerInfo.x, playerInfo.y, playerInfo.id);
              me.game.world.addChild(player);
              game.data.players[playerInfo.id] = player;
