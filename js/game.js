@@ -10,11 +10,7 @@ var global = {
 var game = {
 
     data : {
-        players : [
-            "player1",
-            "player2",
-            "player3"
-        ],
+        players : {},
 
         playersDirty: true,
 
@@ -22,6 +18,11 @@ var game = {
         score : 0,
 
         localSpy : false
+    },
+    functions: {
+        playerById: function(id) {
+            return game.data.players[id];
+        }
     },
 
     // Run on page load.

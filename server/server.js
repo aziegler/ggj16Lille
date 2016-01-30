@@ -68,16 +68,16 @@ function onMoveEmitted(direction) {
    switch (direction)
         {
             case "up":
-                player.y = player.y + 1;
+                player.y = player.y - 10;
                 break;
             case "down":
-                player.y = player.y - 1;
+                player.y = player.y + 10;
                 break;
             case "left":
-                player.x = player.x + 1;
+                player.x = player.x - 10;
                 break;
             case "right":
-                player.x = player.x - 1;
+                player.x = player.x + 10;
                 break;
         }
     io.emit("playerPosition",player);    
@@ -93,6 +93,10 @@ function onStartEmitted(client) {
     }
     if(!players)
         players = [];
+     var i;
+    for (i = 0; i < players.length; i++) {
+        this.emit("playerCreated",players[i]);
+    };
     players.push(newPlayer);
     io.emit("playerCreated",newPlayer);
     this.emit("scoreUpdate",gauge);

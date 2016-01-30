@@ -9,12 +9,18 @@ game.MainScreen = me.ScreenObject.extend({
         global.network.socket  = io('http://localhost:3000');  
         global.network.socket.emit("start");
         global.network.socket.on("playerCreated",function(playerInfo){
-            var player = me.pool.pull("mainPlayer",playerInfo.x, playerInfo.y);
+            var player = me.pool.pull("mainPlayer",playerInfo.x, playerInfo.y, playerInfo.id);
+            console.log(player.id);
              me.game.world.addChild(player);
+             game.data.players[playerInfo.id] = player;
+             console.log(game.data.players);
+            
 
         });
-        global.network.socket.on("playerPosition",function(player){
-            console.log(player);
+        global.network.socket.on("playerPosition",function(playerInfo){
+            var player = game.functions.playerById(playerInfo.id);
+            player.pos.x = playerInfo.x;
+            player.pos.y = playerInfo.y;
         })
 
         global.network.socket.on("scoreUpdate",function(score){

@@ -1,6 +1,6 @@
 game.PlayerEntity = me.Entity.extend({
 
-    init: function(x, y) {
+    init: function(x, y, id) {
         var settings = {};
         settings.image = me.loader.getImage('walk_side');
         settings.width = 64;
@@ -19,7 +19,7 @@ game.PlayerEntity = me.Entity.extend({
         this.alwaysUpdate = true;
 
         // define a basic walking animation (using all frames)
-        this.renderable.addAnimation("walk_side",  [0, 1, 2, 3, 4, 5, 6, 7]);
+        this.renderable.addAnimation("walk_side",  [0]);
         this.renderable.addAnimation("walk_up",  [0, 1, 2, 3, 4, 5, 6, 7]);
         this.renderable.addAnimation("walk_down",  [0, 1, 2, 3, 4, 5, 6, 7]);
 
@@ -37,8 +37,8 @@ game.PlayerEntity = me.Entity.extend({
 
 
     "trySetAnim":function(anim) {
-        console.log("anim: " + anim);
         if (!this.renderable.isCurrentAnimation(anim)) {
+            console.log("anim: " + anim);
             this.renderable.setCurrentAnimation(anim);
         }
     },
@@ -75,7 +75,7 @@ game.PlayerEntity = me.Entity.extend({
         } else {
             this.body.vel.x = 0;
             // change to the standing animation
-            this.renderable.setCurrentAnimation("stand");
+            this.trySetAnim("walk_side");
         }
 
         if(Math.abs(this.body.vel.y) < this.body.accel.y ) {
