@@ -10,6 +10,8 @@ var global = {
 var game = {
 
     data: {
+        lobby: {},
+
         lobbyPlayers: {},
 
         lobbyPlayersDirty: true,

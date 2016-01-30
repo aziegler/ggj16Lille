@@ -36,9 +36,9 @@ game.TitleUI.Container = me.Container.extend({
             console.log("TitleUI.addPlayer numChildren = " + this.numChildren);
 
         var playerItem =
-            new game.TitleUI.PlayerItem(
-                self.width / 2,
-                32 + index * 64,
+            new game.TitleUI.TextRun(
+                self.width / 2 - 128,
+                32 + index * 48,
                 self.font,
                 player.name,
                 player.id);
@@ -49,6 +49,8 @@ game.TitleUI.Container = me.Container.extend({
     },
 
     update: function() {
+        this.updateMainText();
+
         this._super(me.Container, 'update');
 
         if (!game.data.lobbyPlayersDirty) return false;
@@ -70,26 +72,75 @@ game.TitleUI.Container = me.Container.extend({
         });
 
         return true;
+    },
+
+    updateMainText: function() {
+        if (game.data.lobby.gameRunning) {
+            if (!this.gameRunningText) {
+                this.gameRunningText =
+                    new game.TitleUI.TextRun(
+                        64, 400,
+                        this.font,
+                        "GAME IN PROGRESS",
+                        "gameRunning");
+                this.addChild(this.gameRunningText);
+            }
+        } else {
+            if (this.gameRunningText) {
+                this.removeChild(this.gameRunningText);
+                this.gameRunningText = null;
+            }
+        }
+
+        if (game.data.lobby.preGame) {
+            if (!this.preGameText) {
+                this.preGameText =
+                    new game.TitleUI.TextRun(
+                        16, 376,
+                        this.font,
+                        "WAIT FOR PLAYERS OR",
+                        "preGame1"
+                    );
+                this.preGameText2 =
+                    new game.TitleUI.TextRun(
+                        0, 424,
+                        this.font,
+                        "PRESS ENTER TO START",
+                        "preGame2"
+                    );
+
+                this.addChild(this.preGameText);
+                this.addChild(this.preGameText2);
+            }
+        } else {
+            if (this.preGameText) {
+                this.removeChild(this.preGameText);
+                this.preGameText = null;
+            }
+            if (this.preGameText2) {
+                this.removeChild(this.preGameText2);
+                this.preGameText2 = null;
+            }
+        }
     }
 });
-
 
 /**
  * a basic HUD item to display score
  */
-game.TitleUI.PlayerItem = me.Renderable.extend({
+game.TitleUI.TextRun = me.Renderable.extend({
 
 
     /**
      * constructor
      */
-    init: function(x, y, font, playerName, id) {
+    init: function(x, y, font, text, id) {
 
         // call the parent constructor
         // (size does not matter here)
         this._super(me.Renderable, 'init', [x, y, 256, 256]);
 
-        this.playerName = playerName;
+        this.text = text;
 
         this.font = font;
 
@@ -113,7 +164,7 @@ game.TitleUI.PlayerItem = me.Renderable.extend({
      * draw the name box
      */
     draw : function (context) {
-        this.font.draw(context, this.playerName, this.x, this.y);
+        this.font.draw(context, this.text, this.x, this.y);
     }
 
 });
