@@ -299,6 +299,20 @@ function onMove(dirs) {
 
         player.dancing = false;
         player.setAnim("walk");
+
+        if (dx > 0) {
+            player.direction = "left";
+        }
+        else if (dx < 0) {
+            player.direction = "right";
+        }
+
+        if (dy > 0) {
+            player.direction = "down";
+        } else if (dy < 0) {
+            player.direction = "up";
+        }
+
     } else {
         player.dx = 0;
         player.dy = 0;
