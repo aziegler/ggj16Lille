@@ -9,6 +9,10 @@ game.TitleScreen = me.ScreenObject.extend({
 
         socket.emit("lobby");
 
+        game.data.defeat = false;
+        game.data.victory = false;
+        game.data.ended = false;
+
 
 
         // title screen

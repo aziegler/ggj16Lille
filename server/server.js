@@ -243,7 +243,7 @@ function onMoveEmitted(direction) {
     if (player.isDead)
         return;
     player.direction = direction;
-    var offset = 10;
+    var offset = 7;
     switch (direction) {
         case "up":
             player.setAnim("walk");

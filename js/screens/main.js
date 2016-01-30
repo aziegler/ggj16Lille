@@ -4,6 +4,21 @@ game.MainScreen = me.ScreenObject.extend({
         this.font = new me.Font("Verdana", 12, "#fff", "center");
     },
 
+     onDestroyEvent : function() {
+        me.game.world.removeChild(this.HUD);
+        me.game.world.removeChild(this.player);
+
+
+        var socket = global.network.socket;
+        socket.removeAllListeners("returnToLobby");
+        socket.removeAllListeners("refreshPlayer");
+        socket.removeAllListeners("scoreUpdate");
+        socket.removeAllListeners("scoreUpdate");
+        socket.removeAllListeners("removePlayer");
+        socket.removeAllListeners("victory");
+        socket.removeAllListeners("defeat");
+    },
+
     onResetEvent: function () {
         // Connect to server and set global reference to the socket that's connected
         if (me.game.HASH.debug === true) {
@@ -90,8 +105,8 @@ game.MainScreen = me.ScreenObject.extend({
         me.input.bindKey(me.input.KEY.W, "mark");
 
 
-        var player = me.pool.pull("networkPlayer");
-        me.game.world.addChild(player);
+        this.player = me.pool.pull("networkPlayer");
+        me.game.world.addChild(this.player);
 
         this.HUD = new game.HUD.Container();
         me.game.world.addChild(this.HUD);
