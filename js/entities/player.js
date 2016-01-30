@@ -86,9 +86,11 @@ game.PlayerEntity = me.Entity.extend({
         // set the standing animation as default
         animSheet.setCurrentAnimation("stand_side");
     },
+
     refreshCollision: function () {
         me.collision.check(this);
     },
+
     onCollision: function (response) {
         if (response.b.body.collisionType === me.collision.types.ENEMY_OBJECT) {
             console.log("Collision");

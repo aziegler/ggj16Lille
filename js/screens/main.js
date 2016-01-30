@@ -70,7 +70,7 @@ game.MainScreen = me.ScreenObject.extend({
         global.network.socket.on("refreshPlayer", function (infos) {
             var player = game.functions.playerById(infos.id);
 
-            if (me.game.HASH.debug === true) {
+            if (player && me.game.HASH.debug === true) {
                 console.log("refreshPlayer " + player.playerId + "@" + infos.x + "," + infos.y);
             }
 

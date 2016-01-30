@@ -37,6 +37,8 @@ var Player = function (id, name, spriteIdx) {
         name: name,
         x: x,
         y: y,
+        dx: 0,
+        dy: 0,
         dancing: dancing,
         animation: animation,
         direction: direction,

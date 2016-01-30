@@ -1,4 +1,5 @@
 var express = require('express');
+var moment = require('moment');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -24,11 +25,21 @@ Object.defineProperty(GameState, 'RITUAL', {value: 2, writable: false});
 
 init();
 io.on('connection', onSocketConnection);
-setInterval(update, 1000);
+
+function now() {
+    return moment().unix() * 1000 + moment().milliseconds();
+}
+
+var time = now();
+console.log("startTime " + time);
+
+setInterval(update, 100);
 
 var state = GameState.LOBBY;
 var players = [];
 var hasSpy = false;
+
+var velocity = 150.0;
 
 function init() {
 }
@@ -36,6 +47,27 @@ function init() {
 function update() {
     if (state !== GameState.RITUAL)
         return;
+
+    var t = now();
+    var dt = 0.001 * (t - time);
+    time = t;
+
+
+    players.forEach(function(p) {
+        var v = Math.sqrt(p.dx * p.dx + p.dy * p.dy);
+        if (v == 0)
+            return;
+
+        var dp = velocity * dt / v;
+
+        p.x = p.x + p.dx * dp;
+        p.x = Math.max(-10,Math.min(p.x,584));
+
+        p.y = p.y + p.dy * dp;
+        p.y = Math.max(-10,Math.min(p.y,419));
+
+        io.emit("refreshPlayer", p);
+    });
 
     for (var i = 0; i < players.length; i++) {
         if (players[i].dancing && !players[i].isDead) {
@@ -47,7 +79,7 @@ function update() {
         }
     }
     gauge = Math.max(gauge, 0);
-    timer = timer - 1;
+    timer = timer - dt;
     var end = checkGameEnded();
     //console.log("End ? " + end);
     if (end) {
@@ -84,7 +116,7 @@ function onSocketConnection(client) {
     client.on("lobbyReady", onLobbyReady);
 
     // Game messages
-    client.on("move", onMoveEmitted);
+    client.on("move", onMove);
     client.on("dance", onDanceEmitted);
     client.on("stand", onStandEmitted);
     client.on("marked", onMarkedEmitted);
@@ -248,6 +280,31 @@ function onDanceEmitted(value) {
     io.emit("refreshPlayer", player);
 }
 
+function onMove(dirs) {
+
+    var dx = dirs.dx;
+    var dy = dirs.dy;
+
+    console.log("onMove dx=" + dx + ", dy=" + dy);
+
+    var player = playerById(this.id);
+    if (!player)
+        return;
+
+    if (player.isDead)
+        return;
+
+    player.dx = dx;
+    player.dy = dy;
+
+    if (dx != 0 || dy != 0) {
+        player.dancing = false;
+        player.setAnim("walk");
+    }
+
+    io.emit("refreshPlayer", player);
+}
+
 function onMoveEmitted(direction) {
     var player = playerById(this.id);
     if (!player)
@@ -276,8 +333,6 @@ function onMoveEmitted(direction) {
             player.x = player.x + offset;
             break;
     }
-    player.y = Math.max(-10,Math.min(player.y,419));
-    player.x = Math.max(-10,Math.min(player.x,584));
     io.emit("refreshPlayer", player);
 }
 
