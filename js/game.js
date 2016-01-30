@@ -9,17 +9,17 @@ var global = {
 /* Game namespace */
 var game = {
 
-    data : {
-        players : {},
+    data: {
+        players: {},
 
         playersDirty: true,
 
         // score
-        score : 0,
+        score: 0,
 
-        time : 100,
+        time: 100,
 
-        localSpy : false,
+        localSpy: false,
 
         rituel: {
             gaugeStartValue: 50,
@@ -30,16 +30,16 @@ var game = {
         }
     },
     functions: {
-        playerById: function(id) {
+        playerById: function (id) {
             return game.data.players[id];
         }
     },
 
     // Run on page load.
-    "onload" : function () {
+    "onload": function () {
 
         // Initialize the video.
-        if (!me.video.init(640, 480, {wrapper : "screen", scale : "auto"})) {
+        if (!me.video.init(640, 480, {wrapper: "screen", scale: "auto"})) {
             alert("Your browser does not support HTML5 canvas.");
             return;
         }
@@ -67,11 +67,11 @@ var game = {
 
     // Run on game resources loaded.
 
-    "loaded" : function () {
-     //   me.state.set(me.state.MENU, new game.TitleScreen());
+    "loaded": function () {
+        //   me.state.set(me.state.MENU, new game.TitleScreen());
         me.state.set(me.state.READY, new game.MainScreen());
 
-         // set the "Play/Ingame" Screen Object
+        // set the "Play/Ingame" Screen Object
         me.state.set(me.state.MENU, new game.TitleScreen());
         me.state.set(me.state.PLAY, new game.PlayScreen());
 
@@ -94,6 +94,6 @@ var game = {
         me.input.bindKey(me.input.KEY.SPACE, "carry", true);
 
         // start the game
-        me.state.change(me.state.READY);
+        me.state.change(me.state.MENU);
     }
 };
