@@ -6,7 +6,7 @@ game.TitleScreen = me.ScreenObject.extend({
         game.data.lobby.gameRunning = false;
 
         if (!global.network.socket)
-            global.network.socket = io('http://localhost:3000');
+            global.network.socket = io('http://axle-ultrabook:3000');
 
         var socket = global.network.socket;
         socket.on('disconnect', function() {

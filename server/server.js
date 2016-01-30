@@ -6,7 +6,7 @@ var io = require('socket.io')(http);
 var Player = require("./Player").Player;
 
 var GAUGE_INIT = 200;
-var TIMER_INIT = 300;
+var TIMER_INIT = 90;
 
 var gauge;
 var timer;
@@ -33,7 +33,7 @@ function now() {
 var time = now();
 console.log("startTime " + time);
 
-setInterval(update, 100);
+setInterval(update, 16);
 
 var state = GameState.LOBBY;
 var players = [];
@@ -66,9 +66,9 @@ function update() {
     for (var i = 0; i < players.length; i++) {
         if (players[i].dancing && !players[i].isDead) {
             if (players[i].isSpy) {
-                gauge -= 30;
+                gauge -= 20 * dt;
             } else {
-                gauge += 8;
+                gauge += 8 *    dt;
             }
         }
     }
@@ -80,7 +80,7 @@ function update() {
         returnToLobby();
     }
     else {
-        io.emit("scoreUpdate", {"gauge": gauge, "time": timer});
+        io.emit("scoreUpdate", {"gauge": Math.floor(gauge), "time": Math.floor(timer)});
     }
 }
 
