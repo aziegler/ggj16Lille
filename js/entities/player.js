@@ -42,8 +42,7 @@ game.PlayerEntity = me.Entity.extend({
         this.marks = [];
 
         var settings = {};
-        // TODO change to "spritesheet" + playerIdx to add some colors
-        var imageName = "spritesheet1";
+        var imageName = "spritesheet" + playerIdx;
         settings.image = me.loader.getImage(imageName);
         settings.width = 64;
         settings.height = 64;
