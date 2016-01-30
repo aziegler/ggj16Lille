@@ -22,6 +22,8 @@ var Player = function (id, name, spriteIdx) {
         console.log("Marking " + name);
         marks.push(name);
         if (marks.length >= 2) {
+            this.dx = 0;
+            this.dy = 0;
             console.log("Killing " + name);
             this.isDead = true;
             this.animation = "dead"
