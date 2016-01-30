@@ -45,6 +45,8 @@ function update() {
 }
 
 function onSocketConnection(client) {
+    console.log("connection from " + client.id);
+
     client.on("disconnect", onClientDisconnection);
 
     // Lobby messages
@@ -135,19 +137,27 @@ function createPlayer(client) {
 }
 
 function onLobby(client) {
+    if (state != GameState.LOBBY)
+        return;
+
     console.log("lobby from " + client.id);
     createPlayer(client);
 }
 
 function onLobbyReady() {
     // TODO return to lobby state on 0 player
-    //if (state !== GameState.LOBBY)
-    //    return;
+    if (state !== GameState.LOBBY)
+        return;
+
+    state = GameState.RITUAL;
+
     console.log("lobby ready");
     players.forEach(function(p){
        console.log("player " + p.id);
     });
+    console.log("gameStart sent.")
     io.emit("gameStart");
+
 }
 
 function onStandEmitted(value) {
@@ -238,6 +248,13 @@ function onClientDisconnection(client) {
         hasSpy = false;
     players.splice(i, 1);
     io.emit("removePlayer", idToRemove);
+
+    if (state == GameState.RITUAL &&
+        Object.keys(players).length == 0) {
+        console.log("No players left, returning to LOBBY");
+        state = GameState.LOBBY;
+    }
+
     return false;
 }
 

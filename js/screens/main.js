@@ -10,23 +10,32 @@ game.MainScreen = me.ScreenObject.extend({
             console.log("gameStarted")
         }
 
-        Object.keys(game.data.lobbyPlayers).forEach(function (id) {
+        me.levelDirector.loadLevel("area01");
 
-            var playerInfo = game.data.lobbyPlayers[id];
+        setTimeout(function() {
+
             if (me.game.HASH.debug === true) {
-                console.log("player added " + playerInfo.id)
-            }
-            var player = me.pool.pull("mainPlayer", playerInfo.x, playerInfo.y, playerInfo.id, playerInfo.spriteIndex);
-            me.game.world.addChild(player);
-            game.data.players[playerInfo.id] = player;
-            if (game.data.clientId === playerInfo.id.substring(2)) {
-                if (me.game.HASH.debug === true) {
-                    console.log("localPlayer added for " + game.data.clientId);
-                }
-                game.data.localPlayer = player;
+                console.log("player init.");
             }
 
-        });
+            Object.keys(game.data.lobbyPlayers).forEach(function (id) {
+
+                var playerInfo = game.data.lobbyPlayers[id];
+                if (me.game.HASH.debug === true) {
+                    console.log("player added " + playerInfo.id)
+                }
+                var player = me.pool.pull("mainPlayer", playerInfo.x, playerInfo.y, playerInfo.id, playerInfo.spriteIndex);
+                me.game.world.addChild(player);
+                game.data.players[playerInfo.id] = player;
+                if (game.data.clientId === playerInfo.id.substring(2)) {
+                    if (me.game.HASH.debug === true) {
+                        console.log("localPlayer added for " + game.data.clientId);
+                    }
+                    game.data.localPlayer = player;
+                }
+
+            });
+        }, 500);
 
         game.data.lobbyPlayers = {};
 
@@ -56,7 +65,6 @@ game.MainScreen = me.ScreenObject.extend({
             game.data.players[playerId] = null;
         });
 
-        me.levelDirector.loadLevel("area01");
 
 
         me.input.bindKey(me.input.KEY.LEFT, "left");
@@ -68,12 +76,11 @@ game.MainScreen = me.ScreenObject.extend({
 
 
         var player = me.pool.pull("networkPlayer");
+        me.game.world.addChild(player);
 
         this.HUD = new game.HUD.Container();
-
         me.game.world.addChild(this.HUD);
 
-        me.game.world.addChild(player, 4);
     }
 
 });

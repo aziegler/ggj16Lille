@@ -78,6 +78,9 @@ game.TitleScreen = me.ScreenObject.extend({
         socket.on("lobbyAddPlayer", function(p) { self.addPlayer(self, p); });
         socket.on("removePlayer", function(p) { self.removePlayer(self, p); });
         socket.on("gameStart", function() {
+            if (me.game.HASH.debug === true) {
+                console.log("gameStart received.")
+            }
             game.data.clientId = this.id;
             me.state.change(me.state.READY);
         });
