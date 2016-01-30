@@ -24,7 +24,8 @@ game.MainScreen = me.ScreenObject.extend({
         })
 
         global.network.socket.on("scoreUpdate",function(score){
-            game.data.score = score;
+            game.data.score = score.gauge;
+            game.data.time = score.time;
         })
 
          global.network.socket.on("spy",function(){
@@ -38,7 +39,7 @@ game.MainScreen = me.ScreenObject.extend({
         me.input.bindKey(me.input.KEY.RIGHT, "right");
         me.input.bindKey(me.input.KEY.UP, "up");
         me.input.bindKey(me.input.KEY.DOWN, "down");
-        me.input.bindKey(me.input.KEY.X, "x");
+        me.input.bindKey(me.input.KEY.X, "dance");
 
         var player = me.pool.pull("networkPlayer");
         

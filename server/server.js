@@ -4,6 +4,7 @@ var io = require('socket.io')(http);
 var Player = require("./Player").Player;
 
 var gauge = 0;
+var timer = 100;
 
 app.get('/', function(req, res){
   res.sendfile('index.html');
@@ -11,7 +12,7 @@ app.get('/', function(req, res){
 
 init();
 io.on('connection', onSocketConnection);
-setInterval(updateGauge,1000);
+setInterval(update,1000);
 
 var players = [];
 
@@ -19,7 +20,7 @@ function init() {
     players = [];
 }
 
-function updateGauge(){
+function update(){
     var initGauge = gauge;
     for (i = 0; i < players.length; i++) {
        if(players[i].dancing){
@@ -30,9 +31,8 @@ function updateGauge(){
             }
        }
     };
-    if (gauge != initGauge){
-        io.emit("scoreUpdate",gauge);
-    }
+    timer = timer - 1;
+    io.emit("scoreUpdate",{"gauge":gauge,"time":timer});
 }
 
 function onSocketConnection(client) {
@@ -99,7 +99,7 @@ function onStartEmitted(client) {
     };
     players.push(newPlayer);
     io.emit("playerCreated",newPlayer);
-    this.emit("scoreUpdate",gauge);
+    this.emit("scoreUpdate",{"gauge":gauge,"time":timer});
 }
 
 function onClientDisconnection(client) {

@@ -45,7 +45,7 @@ game.NetworkPlayer = me.Entity.extend({
           global.network.socket.emit("move","down");
         }
 
-        if (me.input.isKeyPressed("x")) {
+        if (me.input.isKeyPressed("dance")) {
             console.log(this.dancing);
             if(!this.dancing){
                 this.dancing = true;

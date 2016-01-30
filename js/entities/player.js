@@ -44,6 +44,7 @@ game.PlayerEntity = me.Entity.extend({
     },
 
     update: function(dt) {
+        var x,y;
         if (me.input.isKeyPressed('left')) {
             x = -1;
             // update the entity velocity
