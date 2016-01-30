@@ -54,16 +54,10 @@ function update() {
 
 
     players.forEach(function(p) {
-        var v = Math.sqrt(p.dx * p.dx + p.dy * p.dy);
-        if (v == 0)
-            return;
-
-        var dp = velocity * dt / v;
-
-        p.x = p.x + p.dx * dp;
+        p.x = p.x + p.dx * dt;
         p.x = Math.max(-10,Math.min(p.x,584));
 
-        p.y = p.y + p.dy * dp;
+        p.y = p.y + p.dy * dt;
         p.y = Math.max(-10,Math.min(p.y,419));
 
         io.emit("refreshPlayer", p);
@@ -294,12 +288,18 @@ function onMove(dirs) {
     if (player.isDead)
         return;
 
-    player.dx = dx;
-    player.dy = dy;
-
     if (dx != 0 || dy != 0) {
+        var v = Math.sqrt(dx * dx + dy * dy);
+        var dp = velocity / v;
+
+        player.dx = dx * dp;
+        player.dy = dy * dp;
+
         player.dancing = false;
         player.setAnim("walk");
+    } else {
+        player.dx = 0;
+        player.dy = 0;
     }
 
     io.emit("refreshPlayer", player);

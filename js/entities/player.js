@@ -101,9 +101,18 @@ game.PlayerEntity = me.Entity.extend({
         return false;
     },
 
+    update: function (dt) {
+        this._super(me.Entity, 'update', [dt]);
+
+        this.body.update(dt);
+
+    },
+
     refresh: function (playerInfo) {
-        this.pos.x = playerInfo.x;
-        this.pos.y = playerInfo.y;
+        //this.pos.x = playerInfo.x;
+        //this.pos.y = playerInfo.y;
+
+        this.body.setVelocity(playerInfo.dx, playerInfo.dy);
 
         this.mark.markCount = playerInfo.marks.length;
 
