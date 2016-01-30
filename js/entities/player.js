@@ -8,7 +8,7 @@ game.PlayerEntity = me.Entity.extend({
         this.body.setVelocity(3, 15);
 
         // set the display to follow our position on both axis
-   //     me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
+        me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 
         // ensure the player is updated even when outside of the viewport
         this.alwaysUpdate = true;
@@ -17,6 +17,11 @@ game.PlayerEntity = me.Entity.extend({
         this.renderable.addAnimation("walk_side",  [0, 1, 2, 3, 4, 5, 6, 7]);
         this.renderable.addAnimation("walk_up",  [0, 1, 2, 3, 4, 5, 6, 7]);
         this.renderable.addAnimation("walk_down",  [0, 1, 2, 3, 4, 5, 6, 7]);
+
+        this.renderable.addAnimation("dance1_side",  [0, 1, 2, 3, 4, 5, 6, 7]);
+        this.renderable.addAnimation("dance1_up",  [0, 1, 2, 3, 4, 5, 6, 7]);
+        this.renderable.addAnimation("dance1_down",  [0, 1, 2, 3, 4, 5, 6, 7]);
+
         // define a standing animation (using the first frame)
         this.renderable.addAnimation("stand",  [0]);
 
@@ -26,46 +31,68 @@ game.PlayerEntity = me.Entity.extend({
     },
 
 
+    "trySetAnim":function(anim) {
+        console.log("anim: " + anim);
+        if (!this.renderable.isCurrentAnimation(anim)) {
+            this.renderable.setCurrentAnimation(anim);
+        }
+    },
 
     update: function(dt) {
 
         if (me.input.isKeyPressed('left')) {
-            // flip the sprite on horizontal axis
-            this.renderable.flipX(true);
+            x = -1;
             // update the entity velocity
             this.body.vel.x -= this.body.accel.x * me.timer.tick;
             // change to the walking animation
-            if (!this.renderable.isCurrentAnimation("walk_side")) {
-                this.renderable.setCurrentAnimation("walk_side");
-            }
+
+            this.trySetAnim("walk_side");
         }  else if (me.input.isKeyPressed('right')) {
-            // unflip the sprite
-            this.renderable.flipX(false);
+            x = 1;
             // update the entity velocity
             this.body.vel.x += this.body.accel.x * me.timer.tick;
             // change to the walking animation
-            if (!this.renderable.isCurrentAnimation("walk_side")) {
-                this.renderable.setCurrentAnimation("walk_side");
-            }
+
+            this.trySetAnim("walk_side");
         } else if (me.input.isKeyPressed('up')) {
+            y = 1;
             // update the entity velocity
             this.body.vel.y += this.body.accel.y * me.timer.tick;
             // change to the walking animation
-            if (!this.renderable.isCurrentAnimation("walk_up")) {
-                this.renderable.setCurrentAnimation("walk_up");
-            }
+
+            this.trySetAnim("walk_up");
         } else if (me.input.isKeyPressed('down')) {
+            y = -1;
             // update the entity velocity
             this.body.vel.y += this.body.accel.y * me.timer.tick;
             // change to the walking animation
-            if (!this.renderable.isCurrentAnimation("walk_down")) {
-                this.renderable.setCurrentAnimation("walk_down");
-            }
+
+            this.trySetAnim("walk_down");
         } else {
             this.body.vel.x = 0;
             // change to the standing animation
             this.renderable.setCurrentAnimation("stand");
         }
+
+        if(Math.abs(this.body.vel.y) < this.body.accel.y ) {
+        /*    if(this.direction.x > 0)
+                this.renderable.flipX(false);
+
+            if(this.direction.x < 0)
+                this.renderable.flipX(true);
+*/
+        }
+
+        if(me.input.isKeyPressed('dance')) {
+            if(y > 0)
+                this.trySetAnim("dance1_up");
+            if(y < 0)
+                this.trySetAnim("dance1_down");
+
+            if(x != 0)
+                this.trySetAnim("dance1_side");
+        }
+
 
         if (me.input.isKeyPressed('jump')) {
             if (!this.body.jumping && !this.body.falling) {
@@ -78,7 +105,7 @@ game.PlayerEntity = me.Entity.extend({
         }
 
         // apply physics to the body (this moves the entity)
-        this.body.update(dt);
+      //  this.body.update(dt);
 
         // handle collisions against other shapes
         me.collision.check(this);
@@ -139,4 +166,7 @@ game.PlayerEntity = me.Entity.extend({
 
 
 
-});
+}) || { direction: {
+    x: 0,
+        y: 0,
+}}
