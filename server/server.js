@@ -22,6 +22,7 @@ app.get('/', function (req, res) {
 var GameState = {};
 Object.defineProperty(GameState, 'LOBBY', {value: 1, writable: false});
 Object.defineProperty(GameState, 'RITUAL', {value: 2, writable: false});
+Object.defineProperty(GameState, 'INTRO', {value: 3, writable: false});
 
 init();
 io.on('connection', onSocketConnection);
@@ -108,6 +109,9 @@ function onSocketConnection(client) {
     // Lobby messages
     //client.on("lobby", onLobby);
     client.on("lobbyReady", onLobbyReady);
+
+    // Intro messages
+    client.on("introSkip", onIntroSkip);
 
     // Game messages
     client.on("move", onMove);
@@ -217,10 +221,7 @@ function onLobbyReady() {
     if (state !== GameState.LOBBY)
         return;
 
-    state = GameState.RITUAL;
-
-    gauge = GAUGE_INIT;
-    timer = TIMER_INIT;
+    state = GameState.INTRO;
 
     console.log("lobby ready");
 
@@ -238,7 +239,20 @@ function onLobbyReady() {
         io.to(p.id).emit("gameStart");
     });
 
+}
+
+function onIntroSkip() {
+    if (state !== GameState.INTRO)
+        return;
+
+    state = GameState.RITUAL;
+
+    gauge = GAUGE_INIT;
+    timer = TIMER_INIT;
+
+    io.emit("introDone");
     io.emit("scoreUpdate", {"gauge": gauge, "time": timer});
+
 }
 
 function onStandEmitted(value) {
