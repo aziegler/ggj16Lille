@@ -21,8 +21,14 @@
  </objectgroup>
  <imagelayer name="ol">
   <image source="../img/map/02_OL.png"/>
+  <properties>
+   <property name="z" value="2000"/>
+  </properties>
  </imagelayer>
  <imagelayer name="ombre">
   <image source="../img/map/01_ombre.png"/>
+  <properties>
+   <property name="z" value="3000"/>
+  </properties>
  </imagelayer>
 </map>
