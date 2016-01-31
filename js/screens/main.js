@@ -165,7 +165,7 @@ game.MainScreen = me.ScreenObject.extend({
         me.input.bindKey(me.input.KEY.UP, "up");
         me.input.bindKey(me.input.KEY.DOWN, "down");
         me.input.bindKey(me.input.KEY.X, "dance");
-        me.input.bindKey(me.input.KEY.W, "mark");
+        me.input.bindKey(me.input.KEY.C, "mark");
 
 
         this.player = me.pool.pull("networkPlayer");
