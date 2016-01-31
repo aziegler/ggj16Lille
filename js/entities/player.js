@@ -113,6 +113,8 @@ game.PlayerEntity = me.Entity.extend({
     refresh: function (playerInfo) {
         this.pos.x = playerInfo.x;
         this.pos.y = playerInfo.y;
+        this.pos.z = playerInfo.y;
+        ;
         this.dirX = playerInfo.dx;
         this.dirY = playerInfo.dy;
 

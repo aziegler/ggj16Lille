@@ -27,6 +27,8 @@ game.MainScreen = me.ScreenObject.extend({
     onResetEvent: function () {
         me.audio.stopTrack();
         
+        me.game.sortOn = "y";
+
         // Connect to server and set global reference to the socket that's connected
         if (me.game.HASH.debug === true) {
             console.log("gameStarted")
