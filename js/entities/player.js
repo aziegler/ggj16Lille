@@ -1,5 +1,3 @@
-
-
 game.PlayerEntity = me.Entity.extend({
 
 
@@ -26,7 +24,7 @@ game.PlayerEntity = me.Entity.extend({
         var animSheet = new me.AnimationSheet(0, 24, settings);
         this.renderable.addChild(animSheet);
 
-      
+
         var markSettings = {};
         markSettings.image = me.loader.getImage("TETE_MORT");
         markSettings.width = 32;
@@ -35,36 +33,50 @@ game.PlayerEntity = me.Entity.extend({
         markSettings.frameheight = 32;
 
 
-        this.mark =  new me.AnimationSheet(16,0,markSettings);
+        this.mark = new me.AnimationSheet(16, 0, markSettings);
         this.renderable.addChild(this.mark);
-        this.mark.addAnimation("base",[0,1,2]);
-        this.mark.addAnimation("hidden",[3]);;
-        this.mark.setCurrentAnimation("hidden")
+        this.mark.addAnimation("base", [0, 1, 2]);
+        this.mark.addAnimation("hidden", [3]);
+        ;
+        this.mark.setCurrentAnimation("hidden");
 
         this.sheet = animSheet;
 
-        this.fx = new me.AnimationSheet(0,24,settings);
+        this.fx = new me.AnimationSheet(0, 0, settings);
         this.renderable.addChild(this.fx);
         this.fx.addAnimation("hidden", [19]);
-        this.fx.addAnimation("fx", [18,20,21,22,23,4,9],60);
+        this.fx.addAnimation("fx", [18, 20, 21, 22, 23, 4, 9], 60);
         this.fx.setCurrentAnimation("hidden");
 
+        var lightningSettings = {};
+        lightningSettings.image = me.loader.getImage("FX_eclair");
+        lightningSettings.framewidth = 256;
+        lightningSettings.frameheight = 256;
+
+        this.lightningBox = new me.Container(-96, -160, 256, 256);
+        this.renderable.addChild(this.lightningBox);
+
+        this.lightning =
+            new me.AnimationSheet(0, 0, lightningSettings);
+
+        this.lightning.addAnimation("boom", [0, 1, 2, 3, 4, 5, 6, 7]);
+        //this.lightning.setCurrentAnimation("boom");
         // ensure the player is updated even when outside of the viewport
         this.alwaysUpdate = true;
 
         // define a basic walking animation (using all frames)
-        animSheet.addAnimation("stand_side", [0,3,8,13]);
-        animSheet.addAnimation("stand_up", [7,12,15,16]);
-        animSheet.addAnimation("stand_down", [0,3,8,13]);
+        animSheet.addAnimation("stand_side", [0, 3, 8, 13]);
+        animSheet.addAnimation("stand_up", [7, 12, 15, 16]);
+        animSheet.addAnimation("stand_down", [0, 3, 8, 13]);
 
         animSheet.addAnimation("dead_side", [14]);
         animSheet.addAnimation("dead_up", [14]);
         animSheet.addAnimation("dead_down", [14]);
 
 
-        animSheet.addAnimation("walk_side", [0,3,8,13]);
-        animSheet.addAnimation("walk_up", [7,12,15,16]);
-        animSheet.addAnimation("walk_down", [0,3,8,13]);
+        animSheet.addAnimation("walk_side", [0, 3, 8, 13]);
+        animSheet.addAnimation("walk_up", [7, 12, 15, 16]);
+        animSheet.addAnimation("walk_down", [0, 3, 8, 13]);
 
         animSheet.addAnimation("dance1_side", [6, 1, 10], 100);
         animSheet.addAnimation("dance1_up", [17, 5], 275);
@@ -83,7 +95,7 @@ game.PlayerEntity = me.Entity.extend({
     onCollision: function (response) {
         if (response.b.body.collisionType === me.collision.types.ENEMY_OBJECT) {
             console.log("Collision");
-            if (response.b.marks.indexOf(response.a.playerId) === -1) {
+            if (response.b.marks && response.b.marks.indexOf(response.a.playerId) === -1) {
                 global.network.socket.emit("marked", response.b.playerId);
             }
         }
@@ -94,18 +106,18 @@ game.PlayerEntity = me.Entity.extend({
     update: function (dt) {
         this._super(me.Entity, 'update', [dt]);
         //this.body.update(dt);
-        this.pos.x  = this.pos.x + this.dirX * dt * 0.001;
-        this.pos.y  = this.pos.y + this.dirY * dt * 0.001;
+        this.pos.x = this.pos.x + this.dirX * dt * 0.001;
+        this.pos.y = this.pos.y + this.dirY * dt * 0.001;
 
         this.setZorder();
 
         return true;
 
     },
-    setZorder: function() {
-        if(this.z !=  1000 + Math.max(0, this.pos.y)) {
-            console.log(this.z)
-            this.z = 1000+Math.max(0, this.pos.y);
+    setZorder: function () {
+        if (this.z != 1000 + Math.max(0, this.pos.y)) {
+            console.log(this.z);
+            this.z = 1000 + Math.max(0, this.pos.y);
             me.game.world.sort();
         }
     },
@@ -121,9 +133,9 @@ game.PlayerEntity = me.Entity.extend({
 
         this.setZorder();
 
-        if(playerInfo.marks.length > 0){
+        if (playerInfo.marks.length > 0) {
             this.trySetMark("base");
-        }else{
+        } else {
             this.trySetMark("hidden");
         }
 
@@ -138,13 +150,20 @@ game.PlayerEntity = me.Entity.extend({
         var animName = playerInfo.animation + "_" + dir;
         this.trySetAnim(animName);
     },
-    playMark: function() {
+    playMark: function () {
         if (!this.fx.isCurrentAnimation("fx")) {
-            this.fx.setCurrentAnimation("fx","hidden");
+            this.fx.setCurrentAnimation("fx", "hidden");
         }
     },
+    playLightning: function () {
+        var self = this;
+        this.lightningBox.addChild(this.lightning);
+        this.lightning.setCurrentAnimation("boom", function () {
+            self.lightningBox.removeChild(self.lightning);
+        })
+    },
     trySetMark: function (animName) {
-          if (!this.mark.isCurrentAnimation(animName)) {
+        if (!this.mark.isCurrentAnimation(animName)) {
             this.mark.setCurrentAnimation(animName);
         }
     },

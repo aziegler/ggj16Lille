@@ -75,9 +75,20 @@ game.MainScreen = me.ScreenObject.extend({
         //    me.state.change(me.state.MENU);
         //});
 
-        global.network.socket.on("killed", function () {
+        global.network.socket.on("killed", function (p) {
             me.game.viewport.shake(15, 300, me.game.viewport.AXIS.BOTH);
             me.audio.play('death', false);
+
+            var player = game.functions.playerById(p.id);
+            if (me.game.HASH.debug === true) {
+                console.log("player killed : " + p.id)
+            }
+            if (player) {
+                if (me.game.HASH.debug === true) {
+                    console.log("player killed found : " + player)
+                }
+                player.playLightning();
+            }
         });
 
         global.network.socket.on("refreshPlayer", function (infos) {
