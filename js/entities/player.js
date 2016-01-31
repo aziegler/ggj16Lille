@@ -21,7 +21,7 @@ game.PlayerEntity = me.Entity.extend({
         // call the constructor
         this._super(me.Entity, 'init', [x, y, settings]);
 
-        this.renderable = new me.Container(0, 0, 64, 100);
+        this.renderable = new me.Container(0, 0, 64, 200);
 
         var animSheet = new me.AnimationSheet(0, 24, settings);
         this.renderable.addChild(animSheet);
@@ -42,6 +42,12 @@ game.PlayerEntity = me.Entity.extend({
         this.mark.setCurrentAnimation("hidden")
 
         this.sheet = animSheet;
+
+        this.fx = new me.AnimationSheet(0,24,settings);
+        this.renderable.addChild(this.fx);
+        this.fx.addAnimation("hidden", [19]);
+        this.fx.addAnimation("fx", [18,20,21,22,23,4,9],60);
+        this.fx.setCurrentAnimation("hidden");
 
         // ensure the player is updated even when outside of the viewport
         this.alwaysUpdate = true;
@@ -116,7 +122,11 @@ game.PlayerEntity = me.Entity.extend({
         var animName = playerInfo.animation + "_" + dir;
         this.trySetAnim(animName);
     },
-
+    playMark: function() {
+        if (!this.fx.isCurrentAnimation("fx")) {
+            this.fx.setCurrentAnimation("fx","hidden");
+        }
+    },
     trySetMark: function (animName) {
           if (!this.mark.isCurrentAnimation(animName)) {
             this.mark.setCurrentAnimation(animName);

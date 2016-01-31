@@ -79,6 +79,7 @@ game.NetworkPlayer = me.Entity.extend({
 
         if (me.input.isKeyPressed("mark")) {
             game.data.localPlayer.refreshCollision();
+            game.data.localPlayer.playMark();
             /*//var player = findPlayerInCollision
              var player = null;
              global.network.socket.emit("mark",player);*/
