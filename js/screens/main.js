@@ -98,13 +98,26 @@ game.MainScreen = me.ScreenObject.extend({
             game.data.victory = true;
             game.data.ended = true;
 
-            me.audio.play('victory', false);
+            if (!game.data.localSpy) {
+                me.audio.play('victory', false);
+            } else {
+                me.audio.play('defeat', false);
+            }
+
             me.state.change(me.state.GAME_END);
         });
 
         global.network.socket.on("defeat", function (playerId) {
             game.data.defeat = true;
             game.data.ended = true;
+
+            var player = game.functions.playerById(playerId);
+
+            if (!game.data.localSpy) {
+                me.audio.play('victory', false);
+            } else {
+                me.audio.play('defeat', false);
+            }
 
             me.state.change(me.state.GAME_END);
         });
