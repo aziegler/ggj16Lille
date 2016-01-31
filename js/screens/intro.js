@@ -22,6 +22,7 @@ game.IntroScreen = me.ScreenObject.extend({
 
     onDestroyEvent: function () {
         me.game.world.removeChild(this.introUI);
-        global.network.socket.removeAllListeners("introDone");
+        if (global.network.socket)
+            global.network.socket.removeAllListeners("introDone");
     },
 });

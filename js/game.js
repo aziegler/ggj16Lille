@@ -84,6 +84,8 @@ var game = {
         me.state.set(me.state.MENU, new game.TitleScreen());
         me.state.set(me.state.READY, new game.IntroScreen());
 
+        me.state.set(me.state.GAME_END, new game.EndScreen());
+
         // set a global fading transition for the screen
         me.state.transition("fade", "#FFFFFF", 250);
 

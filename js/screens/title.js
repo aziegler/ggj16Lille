@@ -12,7 +12,7 @@ game.TitleScreen = me.ScreenObject.extend({
         socket.on('disconnect', function() {
             socket.removeAllListeners('disconnect');
             global.network.socket = null;
-            me.state.change(me.state.MENU);
+            me.state.change(me.state.GAME_END);
         });
 
         game.data.defeat = false;
@@ -96,6 +96,9 @@ game.TitleScreen = me.ScreenObject.extend({
             game.data.clientId = this.id;
             me.state.change(me.state.READY);
         });
+
+        game.data.localSpy = false;
+
         socket.on("spy", function () {
             console.log("isSpy");
             game.data.localSpy = true;
