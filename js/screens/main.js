@@ -5,9 +5,12 @@ game.MainScreen = me.ScreenObject.extend({
     },
 
     onDestroyEvent: function () {
-        me.game.world.removeChild(this.HUD);
+        if(this.HUD)
+            me.game.world.removeChild(this.HUD);
         me.game.world.removeChild(this.player);
         me.game.world.removeChild(this.chaudron);
+        if(this.demon)
+            me.game.world.removeChild(this.demon);
 
         var socket = global.network.socket;
         if (!socket) return;
@@ -23,8 +26,12 @@ game.MainScreen = me.ScreenObject.extend({
 
         me.audio.stopTrack();
     },
+    stopAllPlayers: function() {
+
+    },
 
     onResetEvent: function () {
+        var self = this;
         me.audio.stopTrack();
         
         me.game.sortOn = "y";
@@ -99,20 +106,31 @@ game.MainScreen = me.ScreenObject.extend({
         global.network.socket.on("victory", function (playerId) {
             game.data.victory = true;
             game.data.ended = true;
+            if(self.HUD){
+                me.game.world.removeChild(self.HUD);
+                self.HUD = null;
+            }
 
             if (!game.data.localSpy) {
                 me.audio.play('victory', false);
             } else {
                 me.audio.play('defeat', false);
             }
+            setTimeout(function(){
+                me.state.change(me.state.GAME_END);
+            },3000);
 
-            me.state.change(me.state.GAME_END);
+            self.demon = new game.Devil(133,350);
+            me.game.world.addChild(self.demon);
         });
 
         global.network.socket.on("defeat", function (playerId) {
             game.data.defeat = true;
             game.data.ended = true;
-
+            if(self.HUD){
+                me.game.world.removeChild(self.HUD);
+                self.HUD = null;
+            }
             var player = game.functions.playerById(playerId);
 
             if (!game.data.localSpy) {
@@ -121,7 +139,11 @@ game.MainScreen = me.ScreenObject.extend({
                 me.audio.play('defeat', false);
             }
 
-            me.state.change(me.state.GAME_END);
+            setTimeout(function(){
+                me.state.change(me.state.GAME_END);
+            },3000);
+
+            self.chaudron.turnOff();
         });
 
         me.levelDirector.loadLevel("area01");
@@ -141,7 +163,7 @@ game.MainScreen = me.ScreenObject.extend({
         this.HUD = new game.HUD.Container();
         me.game.world.addChild(this.HUD);
 
-        this.chaudron = new game.Chaudron(320, 250);
+        this.chaudron = new game.Chaudron(320, 300);
         me.game.world.addChild(this.chaudron);
 
         me.audio.playTrack('play');

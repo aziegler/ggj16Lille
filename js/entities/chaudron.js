@@ -21,6 +21,7 @@ game.Chaudron = me.Entity.extend({
         animSheet.animationspeed = 250;
         animSheet.addAnimation("on", [0,2,1,3]);
         animSheet.addAnimation("off", [4,5,6,7]);
+        animSheet.addAnimation("turnedOff", [7]);
 
         animSheet.setCurrentAnimation("on");
 
@@ -34,6 +35,10 @@ game.Chaudron = me.Entity.extend({
         this.sheet.setCurrentAnimation("on");
         this.sheet.animationpause = false;
     },
+    turnOff: function() {
+        this.sheet.setCurrentAnimation("off","turnedOff");
+        this.sheet.animationpause = false;        
+    }
     /*
     turnOff: function() {
         this.sheet.setCurrentAnimation("off");
