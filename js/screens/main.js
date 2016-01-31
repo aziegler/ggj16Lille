@@ -123,9 +123,9 @@ game.MainScreen = me.ScreenObject.extend({
             }
 
             if (!game.data.localSpy) {
-                me.audio.play('victory', false);
+                me.audio.play('victory', false, 1);
             } else {
-                me.audio.play('defeat', false);
+                me.audio.play('defeat', false, 1);
             }
             setTimeout(function(){
                 me.state.change(me.state.GAME_END);

@@ -16,9 +16,9 @@ game.IntroScreen = me.ScreenObject.extend({
         var imageName = "Tuto";
         settings.image = me.loader.getImage(imageName);
         settings.width = 640;
-        settings.height = 200;
+        settings.height = 240;
         settings.framewidth = 640;
-        settings.frameheight = 200;
+        settings.frameheight = 240;
 
         var animSheet = new me.AnimationSheet(0, 150, settings);
         me.game.world.addChild(animSheet);
