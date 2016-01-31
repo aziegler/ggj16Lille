@@ -19,7 +19,7 @@ game.Chaudron = me.Entity.extend({
         this.sheet = animSheet;
 
         animSheet.animationspeed = 250;
-        animSheet.addAnimation("on", [0,1,2,3]);
+        animSheet.addAnimation("on", [0,2,1,3]);
         animSheet.addAnimation("off", [4,5,6,7]);
 
         animSheet.setCurrentAnimation("on");
