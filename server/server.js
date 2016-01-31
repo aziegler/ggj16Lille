@@ -174,7 +174,7 @@ function createPlayer(client) {
     // haha
     var num = 1;
     while (true) {
-        var newName = "PLAYER " + num;
+        var newName = "Player" + num;
         if (players.every(function (p) {
                 return p.name !== newName
             }))
@@ -192,7 +192,7 @@ function createPlayer(client) {
     console.log("Assigned color index " + color + " to " + client.id);
 
     // Create and store object
-    var newPlayer = new Player(client.id, "PLAYER " + num, color);
+    var newPlayer = new Player(client.id, "Player" + num, color);
     newPlayer.x = Math.floor(Math.random() * 594 - 10);
     newPlayer.y = Math.floor(Math.random() * 419 - 10);
     players.push(newPlayer);
