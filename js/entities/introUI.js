@@ -4,7 +4,7 @@ game.IntroUI = me.Container.extend({
         this._super(me.Container, 'init',
             [0, 0, me.game.viewport.width, me.game.viewport.height]);
 
-        this.font = new me.BitmapFont("32x32_font", 32);
+       /* this.font = new me.BitmapFont("32x32_font", 32);
 
         this.font.resize(0.5);
 
@@ -61,7 +61,8 @@ game.IntroUI = me.Container.extend({
 
             y += 32;
         })
-    },
+    },*/
+},
 
 
 });
