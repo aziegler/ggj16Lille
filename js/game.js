@@ -23,8 +23,6 @@ var game = {
         // score
         score: 0,
 
-        time: 100,
-
         localSpy: false,
 
         rituel: {

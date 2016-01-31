@@ -148,7 +148,7 @@ game.HUD.ScoreItem = me.Renderable.extend( {
 
 game.HUD.Gauge = me.Container.extend({
     init: function(x, y) {
-        this._super(me.Container, 'init', [x, y, 10, 10]);
+        this._super(me.Container, 'init', [x, y, 600, 10]);
 
         this.borderSprite = new me.Sprite(0, 0, {
             image: "gauge_empty"
@@ -164,7 +164,7 @@ game.HUD.Gauge = me.Container.extend({
     },
 
     update: function(dt) {
-        this.fillSprite.width = 573.0 * game.data.score / 400;
+        this.fillSprite.width = Math.max(573.0 * game.data.score / 400,1);
     }
 
 

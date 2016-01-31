@@ -6,10 +6,8 @@ var io = require('socket.io')(http);
 var Player = require("./Player").Player;
 
 var GAUGE_INIT = 200;
-var TIMER_INIT = 90;
 
 var gauge;
-var timer;
 var colors = [1, 2, 3, 4, 5, 6];
 
 app.use(express.static(__dirname + '/public'));
@@ -74,22 +72,17 @@ function update() {
         }
     }
     gauge = Math.max(gauge, 0);
-    timer = timer - dt;
     var end = checkGameEnded();
     //console.log("End ? " + end);
     if (end) {
         returnToLobby();
     }
     else {
-        io.emit("scoreUpdate", {"gauge": Math.floor(gauge), "time": Math.floor(timer)});
+        io.emit("scoreUpdate", {"gauge": Math.floor(gauge)});
     }
 }
 
 function checkGameEnded() {
-    if (timer <= 0) {
-        io.emit("defeat");
-        return true;
-    }
     if (gauge > 400) {
         io.emit("victory");
         return true;
@@ -248,10 +241,9 @@ function onIntroSkip() {
     state = GameState.RITUAL;
 
     gauge = GAUGE_INIT;
-    timer = TIMER_INIT;
-
+   
     io.emit("introDone");
-    io.emit("scoreUpdate", {"gauge": gauge, "time": timer});
+    io.emit("scoreUpdate", {"gauge": gauge});
 
 }
 

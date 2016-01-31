@@ -79,7 +79,6 @@ game.MainScreen = me.ScreenObject.extend({
 
         global.network.socket.on("scoreUpdate", function (score) {
             game.data.score = score.gauge;
-            game.data.time = score.time;
         });
 
 
