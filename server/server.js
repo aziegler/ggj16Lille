@@ -102,6 +102,9 @@ function checkGameEnded() {
 function onSocketConnection(client) {
     console.log("connection from " + client.id);
 
+    if (players.length > 5)
+        client.disconnect();
+
     client.on("disconnect", onClientDisconnection);
 
     // Lobby messages
