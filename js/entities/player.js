@@ -1,33 +1,3 @@
-var Marks = me.Renderable.extend({
-    /**
-     * constructor
-     */
-    init: function () {
-        this.markCount = 0;
-        // call the parent constructor
-        // (size does not matter here)
-        this._super(me.Renderable, 'init', [0, 0, 10, 10]);
-
-        // create a font
-        this.font = new me.Font("Arial", 18, "#ffffff");
-
-
-    },
-
-    /**
-     * update function
-     */
-    update: function (dt) {
-        return true;
-    },
-
-    /**
-     * draw the score
-     */
-    draw: function (renderer) {
-        this.font.draw(renderer, this.markCount, 26, 8);
-    }
-});
 
 
 game.PlayerEntity = me.Entity.extend({
@@ -51,14 +21,25 @@ game.PlayerEntity = me.Entity.extend({
         // call the constructor
         this._super(me.Entity, 'init', [x, y, settings]);
 
-        this.renderable = new me.Container(0, 0, 64, 64);
+        this.renderable = new me.Container(0, 0, 64, 100);
 
-        var animSheet = new me.AnimationSheet(0, 0, settings);
+        var animSheet = new me.AnimationSheet(0, 24, settings);
         this.renderable.addChild(animSheet);
 
-        this.mark = new Marks();
-        this.renderable.addChild(this.mark);
+      
+        var markSettings = {};
+        markSettings.image = me.loader.getImage("TETE_MORT");
+        markSettings.width = 32;
+        markSettings.height = 32;
+        markSettings.framewidth = 32;
+        markSettings.frameheight = 32;
 
+
+        this.mark =  new me.AnimationSheet(16,0,markSettings);
+        this.renderable.addChild(this.mark);
+        this.mark.addAnimation("base",[0,1,2]);
+        this.mark.addAnimation("hidden",[3]);;
+        this.mark.setCurrentAnimation("hidden")
 
         this.sheet = animSheet;
 
@@ -117,7 +98,12 @@ game.PlayerEntity = me.Entity.extend({
         this.dirX = playerInfo.dx;
         this.dirY = playerInfo.dy;
        
-        this.mark.markCount = playerInfo.marks.length;
+
+        if(playerInfo.marks.length > 0){
+            this.trySetMark("base");
+        }else{
+            this.trySetMark("hidden");
+        }
 
         var dir = playerInfo.direction;
 
@@ -131,6 +117,11 @@ game.PlayerEntity = me.Entity.extend({
         this.trySetAnim(animName);
     },
 
+    trySetMark: function (animName) {
+          if (!this.mark.isCurrentAnimation(animName)) {
+            this.mark.setCurrentAnimation(animName);
+        }
+    },
 
     trySetAnim: function (animName) {
 
