@@ -83,10 +83,13 @@ game.HUD.Spy = me.Container.extend({
         imageSettings.height = 82;
 
 
-        this.img = new me.ImageLayer(0, 0, imageSettings);
-        this.img.repeat = "no-repeat";
+        if(game.data.localSpy) {
 
-        this.addChild(this.img);
+            this.img = new me.ImageLayer(0, 0, imageSettings);
+            this.img.repeat = "no-repeat";
+
+            this.addChild(this.img);
+        }
     }
 });
 
