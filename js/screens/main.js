@@ -27,7 +27,7 @@ game.MainScreen = me.ScreenObject.extend({
             console.log("gameStarted")
         }
 
-        me.levelDirector.loadLevel("area01");
+      //s  me.levelDirector.loadLevel("area01");
 
         setTimeout(function () {
 
