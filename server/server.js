@@ -62,6 +62,11 @@ function update() {
         io.emit("refreshPlayer", p);
     });
 
+    var count = player.length;
+    
+    var playerPower = 30 / player.length;
+    var spyPower = 30 + player.length;
+
     for (var i = 0; i < players.length; i++) {
         if (players[i].dancing && !players[i].isDead) {
             if (players[i].isSpy) {
