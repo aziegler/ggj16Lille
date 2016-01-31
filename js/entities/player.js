@@ -121,7 +121,7 @@ game.PlayerEntity = me.Entity.extend({
 
         var dir = playerInfo.direction;
 
-        this.sheet.flipX(dir == "right");
+        this.sheet.flipX(dir == "left");
 
         if (dir == "left" || dir == "right") {
             dir = "side";
