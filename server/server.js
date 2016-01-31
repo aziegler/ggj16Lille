@@ -144,6 +144,8 @@ function onMarkedEmitted(playerMarked) {
     var previousMarkedPlayer = playerById(markingPlayer.markedPlayer);
     console.log("Unmarking " + markingPlayer.markedPlayer)
     if (previousMarkedPlayer) {
+        if(previousMarkedPlayer === markedPlayer)
+            return;
         var idx = previousMarkedPlayer.marks.indexOf(this.id);
         previousMarkedPlayer.marks.splice(idx, 1);
         console.log("Refreshing")
