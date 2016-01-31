@@ -8,8 +8,6 @@ game.MainScreen = me.ScreenObject.extend({
         me.game.world.removeChild(this.HUD);
         me.game.world.removeChild(this.player);
 
-        game.data.localSpy = false;
-
         var socket = global.network.socket;
         if (!socket) return;
 
@@ -29,7 +27,7 @@ game.MainScreen = me.ScreenObject.extend({
             console.log("gameStarted")
         }
 
-        me.levelDirector.loadLevel("area01");
+      //s  me.levelDirector.loadLevel("area01");
 
         setTimeout(function () {
 
@@ -59,9 +57,9 @@ game.MainScreen = me.ScreenObject.extend({
             game.data.lobbyPlayers = {};
         }, 500);
 
-        global.network.socket.on("returnToLobby", function () {
-            me.state.change(me.state.MENU);
-        });
+        //global.network.socket.on("returnToLobby", function () {
+        //    me.state.change(me.state.MENU);
+        //});
 
         global.network.socket.on("killed", function () {
             me.game.viewport.shake(15, 300, me.game.viewport.AXIS.BOTH);
@@ -94,11 +92,15 @@ game.MainScreen = me.ScreenObject.extend({
         global.network.socket.on("victory", function (playerId) {
             game.data.victory = true;
             game.data.ended = true;
+
+            me.state.change(me.state.GAME_END);
         });
 
         global.network.socket.on("defeat", function (playerId) {
             game.data.defeat = true;
             game.data.ended = true;
+
+            me.state.change(me.state.GAME_END);
         });
 
         me.levelDirector.loadLevel("area01");
