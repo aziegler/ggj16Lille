@@ -20,8 +20,7 @@ game.HUD.Container = me.Container.extend({
         this.name = "HUD";
 
         // add our child score object at the right-bottom position
-        this.addChild(new game.HUD.ScoreItem(630, 440));
-        this.addChild(new game.HUD.TimeItem(230, 440));
+        this.addChild(new game.HUD.Gauge(0, 0));
         this.addChild(new game.HUD.Spy(430, 440));
         this.addChild(new game.HUD.Result(200,200));
     }
@@ -145,6 +144,30 @@ game.HUD.ScoreItem = me.Renderable.extend( {
             this.font.draw (renderer,"", this.pos.x, this.pos.y);
 
     }
+});
+
+game.HUD.Gauge = me.Container.extend({
+    init: function(x, y) {
+        this._super(me.Container, 'init', [x, y, 10, 10]);
+
+        this.borderSprite = new me.Sprite(0, 0, {
+            image: "gauge_empty"
+        });
+
+        this.addChild(this.borderSprite);
+
+        this.fillSprite = new me.Sprite(28, 24, {
+            image: "gauge_fill"
+        });
+
+        this.addChild(this.fillSprite);
+    },
+
+    update: function(dt) {
+        this.fillSprite.width = 573.0 * game.data.score / 400;
+    }
+
+
 });
 
 game.HUD.TimeItem = me.Renderable.extend( {
