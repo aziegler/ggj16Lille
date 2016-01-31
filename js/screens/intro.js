@@ -18,6 +18,8 @@ game.IntroScreen = me.ScreenObject.extend({
             me.state.change(me.state.PLAY);
         })
 
+        me.audio.play("game_start", false);
+
     },
 
     onDestroyEvent: function () {

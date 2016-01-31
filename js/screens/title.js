@@ -142,6 +142,7 @@ game.TitleScreen = me.ScreenObject.extend({
             console.log("socket addPlayer " + player.id);
         game.data.lobbyPlayers[player.id] = player;
         game.data.lobbyPlayersDirty = true;
+        me.audio.play('new_player', false);
     },
 
     removePlayer : function(self, playerId) {

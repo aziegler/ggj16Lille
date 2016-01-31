@@ -19,6 +19,8 @@ game.MainScreen = me.ScreenObject.extend({
         socket.removeAllListeners("victory");
         socket.removeAllListeners("defeat");
         socket.removeAllListeners("killed");
+
+        me.audio.stopTrack('play');
     },
 
     onResetEvent: function () {
@@ -63,6 +65,7 @@ game.MainScreen = me.ScreenObject.extend({
 
         global.network.socket.on("killed", function () {
             me.game.viewport.shake(15, 300, me.game.viewport.AXIS.BOTH);
+            me.audio.play('death', false);
         });
 
         global.network.socket.on("refreshPlayer", function (infos) {
@@ -92,6 +95,7 @@ game.MainScreen = me.ScreenObject.extend({
             game.data.victory = true;
             game.data.ended = true;
 
+            me.audio.play('victory', false);
             me.state.change(me.state.GAME_END);
         });
 
@@ -118,6 +122,8 @@ game.MainScreen = me.ScreenObject.extend({
 
         this.HUD = new game.HUD.Container();
         me.game.world.addChild(this.HUD);
+
+        me.audio.playTrack('play');
 
     }
 
