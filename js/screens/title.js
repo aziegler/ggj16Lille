@@ -101,6 +101,8 @@ game.TitleScreen = me.ScreenObject.extend({
             game.data.localSpy = true;
    //         game.data.localPlayer.isSpy = true;
         });
+
+        me.audio.playTrack("ritual_title");
     },
 
     /**
@@ -118,6 +120,8 @@ game.TitleScreen = me.ScreenObject.extend({
         socket.removeAllListeners("initLobbyWaiting");
         socket.removeAllListeners("lobbyAddPlayer");
         socket.removeAllListeners("removePlayer");
+
+        me.audio.stopTrack("ritual_title");
     },
 
     initWaiting : function(self) {

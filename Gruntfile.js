@@ -113,7 +113,7 @@ module.exports = function(grunt) {
           varname: 'game.resources',
         },
         files: [{
-          src: ['data/bgm/**/*', 'data/sfx/**/*'],
+          src: ['data/bgm/**/*', 'data/sfx/**/*', 'data/snd/**/*'],
           type: 'audio'
         },{
           src: ['data/img/**/*.png'],
