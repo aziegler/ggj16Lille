@@ -7,6 +7,7 @@ game.MainScreen = me.ScreenObject.extend({
     onDestroyEvent: function () {
         me.game.world.removeChild(this.HUD);
         me.game.world.removeChild(this.player);
+        me.game.world.removeChild(this.chaudron);
 
         var socket = global.network.socket;
         if (!socket) return;
@@ -122,6 +123,9 @@ game.MainScreen = me.ScreenObject.extend({
 
         this.HUD = new game.HUD.Container();
         me.game.world.addChild(this.HUD);
+
+        this.chaudron = new game.Chaudron(320, 250);
+        me.game.world.addChild(this.chaudron);
 
         me.audio.playTrack('play');
 

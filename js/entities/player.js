@@ -21,7 +21,7 @@ game.PlayerEntity = me.Entity.extend({
         // call the constructor
         this._super(me.Entity, 'init', [x, y, settings]);
 
-        this.renderable = new me.Container(0, 0, 64, 200);
+        this.renderable = new me.Container(-32, 0, 64, 64);
 
         var animSheet = new me.AnimationSheet(0, 24, settings);
         this.renderable.addChild(animSheet);
@@ -87,6 +87,7 @@ game.PlayerEntity = me.Entity.extend({
                 global.network.socket.emit("marked", response.b.playerId);
             }
         }
+
         return false;
     },
 
@@ -96,6 +97,17 @@ game.PlayerEntity = me.Entity.extend({
         this.pos.x  = this.pos.x + this.dirX * dt * 0.001;
         this.pos.y  = this.pos.y + this.dirY * dt * 0.001;
 
+        this.setZorder();
+
+        return true;
+
+    },
+    setZorder: function() {
+        if(this.z !=  1000 + Math.max(0, this.pos.y)) {
+            console.log(this.z)
+            this.z = 1000+Math.max(0, this.pos.y);
+            me.game.world.sort();
+        }
     },
 
     refresh: function (playerInfo) {
@@ -103,7 +115,9 @@ game.PlayerEntity = me.Entity.extend({
         this.pos.y = playerInfo.y;
         this.dirX = playerInfo.dx;
         this.dirY = playerInfo.dy;
-       
+
+
+        this.setZorder();
 
         if(playerInfo.marks.length > 0){
             this.trySetMark("base");
