@@ -21,10 +21,12 @@ game.MainScreen = me.ScreenObject.extend({
         socket.removeAllListeners("defeat");
         socket.removeAllListeners("killed");
 
-        me.audio.stopTrack('play');
+        me.audio.stopTrack();
     },
 
     onResetEvent: function () {
+        me.audio.stopTrack();
+        
         // Connect to server and set global reference to the socket that's connected
         if (me.game.HASH.debug === true) {
             console.log("gameStarted")

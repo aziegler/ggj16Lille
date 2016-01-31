@@ -1,6 +1,7 @@
 game.TitleScreen = me.ScreenObject.extend({
 
     onResetEvent : function() {
+        me.audio.stopTrack();
 
         game.data.lobby.preGame = false;
         game.data.lobby.gameRunning = false;
@@ -105,6 +106,7 @@ game.TitleScreen = me.ScreenObject.extend({
    //         game.data.localPlayer.isSpy = true;
         });
 
+
         me.audio.playTrack("ritual_title");
     },
 
@@ -124,7 +126,7 @@ game.TitleScreen = me.ScreenObject.extend({
         socket.removeAllListeners("lobbyAddPlayer");
         socket.removeAllListeners("removePlayer");
 
-        me.audio.stopTrack("ritual_title");
+        me.audio.stopTrack();
     },
 
     initWaiting : function(self) {

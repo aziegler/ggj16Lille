@@ -1,6 +1,8 @@
 game.IntroScreen = me.ScreenObject.extend({
 
     onResetEvent: function () {
+        me.audio.stopTrack();
+        
         if (me.game.HASH.debug === true) {
             console.log("Intro screen start")
         }
@@ -26,5 +28,6 @@ game.IntroScreen = me.ScreenObject.extend({
         me.game.world.removeChild(this.introUI);
         if (global.network.socket)
             global.network.socket.removeAllListeners("introDone");
+        me.audio.stopTrack();
     },
 });
