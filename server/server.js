@@ -62,10 +62,10 @@ function update() {
         io.emit("refreshPlayer", p);
     });
 
-    var count = player.length;
+    var count = players.length;
     
-    var playerPower = 30 / player.length;
-    var spyPower = 30 + player.length;
+    var playerPower = 30 / players.length;
+    var spyPower = 30 + players.length;
 
     for (var i = 0; i < players.length; i++) {
         if (players[i].dancing && !players[i].isDead) {
@@ -279,6 +279,8 @@ function onDanceEmitted(value) {
     if (value) {
         player.dancing = true;
         player.stand = false;
+        player.dx = 0;
+        player.dy = 0;
         player.setAnim("dance1");
     } else {
         player.dancing = false;
