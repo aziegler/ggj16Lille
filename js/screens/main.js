@@ -144,7 +144,7 @@ game.MainScreen = me.ScreenObject.extend({
             }
             var player = game.functions.playerById(playerId);
 
-            if (!game.data.localSpy) {
+            if (game.data.localSpy) {
                 me.audio.play('victory', false);
             } else {
                 me.audio.play('defeat', false);
