@@ -4,7 +4,7 @@
   <image source="../img/map/area01_level_tiles.png" width="640" height="241"/>
  </tileset>
  <imagelayer name="background">
-  <image source="../img/area01_bg0.png"/>
+  <image source="../img/map/03_BG.png"/>
  </imagelayer>
  <layer name="tiles" width="20" height="15">
   <data encoding="base64">
