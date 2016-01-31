@@ -19,4 +19,10 @@
    <polyline points="0,0 188,-49.3333 85.3333,-128 -12,-158.667 1.33333,1.33333"/>
   </object>
  </objectgroup>
+ <imagelayer name="ol">
+  <image source="../img/map/02_OL.png"/>
+ </imagelayer>
+ <imagelayer name="ombre">
+  <image source="../img/map/01_ombre.png"/>
+ </imagelayer>
 </map>
