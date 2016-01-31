@@ -11,41 +11,40 @@ game.EndUI = me.Container.extend({
 
         this.addChild(new me.ColorLayer("bg", "#000000", -Infinity));
 
-        var win = "YOU WON!";
-        var loss = "YOU FAILED!";
-
+       
         if (me.game.HASH.debug === true) {
             console.log("Game end");
             console.log("victory: " + game.data.victory);
             console.log("defeat: " + game.data.defeat);
         }
-
+        var imageSettings = {};
+        imageSettings.image = me.loader.getImage("victory_text");
+      
         var text;
         if (game.data.victory) {
             if (game.data.localSpy) {
-                text = loss;
+                imageSettings.image = me.loader.getImage("defeat_text");
             } else {
-                text = win;
+                imageSettings.image = me.loader.getImage("victory_text");
             }
         } else if (game.data.defeat) {
             if (game.data.localSpy) {
-                text = win;
+                imageSettings.image = me.loader.getImage("victory_text");
             } else {
-                text = loss;
+                imageSettings.image = me.loader.getImage("defeat_text");
             }
         } else {
-            text = "YOU FLED, LEL!";
+            imageSettings.image = me.loader.getImage("defeat_text");
         }
+        imageSettings.width = 1000;
+        imageSettings.height = 1000;
 
 
-        var textRun = new game.TitleUI.TextRun(
-            this.width / 2 - 24 * text.length,
-            this.height / 2 - 24,
-            this.font,
-            text,
-            "outcomeText"
-        );
+        this.text = new me.ImageLayer(0,200,imageSettings);
 
-        this.addChild(textRun);
+        this.text.repeat = "no-repeat";
+        
+
+        this.addChild(this.text);
     }
 });

@@ -7,7 +7,7 @@ game.EndScreen = me.ScreenObject.extend({
 
         setTimeout(function(){
             me.state.change(me.state.MENU);
-        }, 2000);
+        }, 10000);
     },
 
     onDestroyEvent: function() {
